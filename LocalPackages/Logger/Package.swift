@@ -1,4 +1,4 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 6.0
 import PackageDescription
 
 let swiftSettings: [SwiftSetting] = [
@@ -27,19 +27,22 @@ let package = Package(
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "11.0.0")
     ],
     targets: [
-        // Core logging protocols / shared types
-        .target(name: "Logger"),
+        .target(
+            name: "Logger",
+            swiftSettings: swiftSettings,
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+        ),
 
-        // Firebase Analytics logger
         .target(
             name: "LoggerFirebaseAnalytics",
             dependencies: [
                 "Logger",
                 .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk")
-            ]
+            ],
+            swiftSettings: swiftSettings,
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
         ),
 
-        // Firebase Crashlytics logger
         .target(
             name: "LoggerFirebaseCrashlytics",
             dependencies: [
@@ -52,7 +55,7 @@ let package = Package(
 
         .testTarget(
             name: "LoggerTests",
-            dependencies: ["Logger"]
+            dependencies: ["Logger", "LoggerFirebaseAnalytics", "LoggerFirebaseCrashlytics"]
         )
     ]
 )

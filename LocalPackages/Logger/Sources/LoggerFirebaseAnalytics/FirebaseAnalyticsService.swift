@@ -10,21 +10,26 @@ import FirebaseAnalytics
 import Logger
 
 public struct FirebaseAnalyticsService: LogService {
-    
+    private enum Constants {
+        static let characterCountLimit: Int = 40
+        static let parameterCountLimit: Int = 25
+        static let parameterNameLength: Int = 100
+    }
+
     public static var appInstanceID: String? {
         Analytics.appInstanceID()
     }
 
     public init() {
-        
+
     }
 
-    public func trackEvent(event: LoggableEvent) {
+    public func trackEvent(event: any LoggableEvent) {
         // Firebase allows up to 500 unique events
         // https://firebase.google.com/docs/analytics/events?platform=ios
 
         var parameters = event.parameters ?? [:]
-        
+
         // Firebase Analytics supports several value types, but not all.
         // I can't find documentation, but if a bad value is sent, it will log to console.
         // Unsupported Types:
@@ -35,7 +40,7 @@ public struct FirebaseAnalyticsService: LogService {
             // Convert Date to String
             if let date = value as? Date, let string = convertToString(date) {
                 parameters[key] = string
-                
+
             // Firebase Analytics doesn't allow Arrays
             } else if let array = value as? [Any] {
                 if let string = convertToString(array) {
@@ -45,42 +50,39 @@ public struct FirebaseAnalyticsService: LogService {
                 }
             }
         }
-        
-        for (key, value) in parameters {
-            // Keys are limited to 40 characters
-            if key.count > 40 {
-                parameters.removeValue(forKey: key)
-                
-                let newKey = key.clean(maxCharacters: 40)
-                parameters[newKey] = value
-            }
+
+        for (key, value) in parameters where key.count > Constants.characterCountLimit {
+            parameters.removeValue(forKey: key)
+
+            let newKey = key.clean(maxCharacters: Constants.characterCountLimit)
+            parameters[newKey] = value
         }
-        
+
         for (key, value) in parameters {
             // Values are limited to 100 characters
             if let string = value as? String {
-                parameters[key] = string.clean(maxCharacters: 100)
+                parameters[key] = string.clean(maxCharacters: Constants.parameterNameLength)
             }
         }
-        
+
         // Parameters are limited to 25
-        parameters.first(upTo: 25)
+        parameters.first(upTo: Constants.characterCountLimit)
 
         // Event names are limited to 40 characters
-        let name = event.eventName.clean(maxCharacters: 40)
+        let name = event.eventName.clean(maxCharacters: Constants.characterCountLimit)
         let params = parameters.isEmpty ? nil : parameters
         Analytics.logEvent(name, parameters: params)
     }
 
     public func trackScreenView(event: any LoggableEvent) {
         // Firebase has a special event for tracking screen views
-        let screenName = event.eventName.clean(maxCharacters: 40)
-        
+        let screenName = event.eventName.clean(maxCharacters: Constants.characterCountLimit)
+
         Analytics.logEvent(AnalyticsEventScreenView, parameters: [
             AnalyticsParameterScreenName: screenName
         ])
     }
-    
+
     private func convertToString(_ value: Any) -> String? {
         switch value {
         case let value as String:
@@ -97,7 +99,7 @@ public struct FirebaseAnalyticsService: LogService {
             return value.formatted(date: .abbreviated, time: .shortened)
         case let array as [Any]:
             return array.compactMap { convertToString($0) }.sorted().joined(separator: ", ")
-        case let value as CustomStringConvertible:
+        case let value as any CustomStringConvertible:
             return value.description
         default:
             return nil

@@ -10,13 +10,17 @@ import SwiftUI
 @MainActor
 @Observable
 public class LogManager {
-    private let services: [LogService]
+    private let services: [any LogService]
 
-    public init(services: [LogService] = []) {
+    public init(services: [any LogService] = []) {
         self.services = services
     }
     
-    public func trackEvent(eventName: String, parameters: [String : Any]? = nil, type: LogType = .analytic) {
+    public func trackEvent(
+        eventName: String,
+        parameters: [String: Any]? = nil,
+        type: LogType = .analytic
+    ) {
         let event = AnyLoggableEvent(eventName: eventName, parameters: parameters, type: type)
         for service in services {
             service.trackEvent(event: event)
@@ -29,13 +33,13 @@ public class LogManager {
         }
     }
 
-    public func trackEvent(event: LoggableEvent) {
+    public func trackEvent(event: any LoggableEvent) {
         for service in services {
             service.trackEvent(event: event)
         }
     }
 
-    public func trackScreenView(event: LoggableEvent) {
+    public func trackScreenView(event: any LoggableEvent) {
         for service in services {
             service.trackScreenView(event: event)
         }
