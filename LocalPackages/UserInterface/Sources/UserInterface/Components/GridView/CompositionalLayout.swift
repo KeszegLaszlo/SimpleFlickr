@@ -24,7 +24,6 @@ public struct CompositionalLayout<Content: View>: View {
     private var spacing: CGFloat = 6
 
     private var content: Content
-    @Namespace private var animation
 
     // MARK: - Row kind
     private enum Row: Int { case one = 0, two, three, four }
@@ -59,14 +58,13 @@ public struct CompositionalLayout<Content: View>: View {
 
             HStack(spacing: spacing) {
                 if let first = collection.first {
-                    matched(first)
+                    first
                 }
 
                 if collection.count != 1 {
                     VStack(spacing: spacing) {
                         ForEach(collection.dropFirst()) {
-                            matched($0)
-                                .frame(width: width * Constants.Layout.columnWidthFactor)
+                            $0.frame(width: width * Constants.Layout.columnWidthFactor)
                         }
                     }
                 }
@@ -76,15 +74,9 @@ public struct CompositionalLayout<Content: View>: View {
     }
 
     @ViewBuilder
-    private func matched(_ element: SubviewsCollection.Element) -> some View {
-        element
-            .matchedGeometryEffect(id: element.id, in: animation)
-    }
-
-    @ViewBuilder
     private func layout2(_ collection: [SubviewsCollection.Element]) -> some View {
         HStack(spacing: spacing) {
-            ForEach(collection) { matched($0) }
+            ForEach(collection) { $0 }
         }
         .frame(
             height: collection.count == 1 ? Constants.Layout.singleItemRowHeight : Constants.Layout.multiItemRowHeight
@@ -99,20 +91,20 @@ public struct CompositionalLayout<Content: View>: View {
             HStack(spacing: spacing) {
                 if collection.count == 4 {
                     VStack(spacing: spacing) {
-                        ForEach(collection.prefix(2)) { matched($0) }
+                        ForEach(collection.prefix(2)) { $0 }
                     }
                     VStack(spacing: spacing) {
-                        ForEach(collection.dropFirst(2)) { matched($0) }
+                        ForEach(collection.dropFirst(2)) { $0 }
                     }
                 } else {
                     if let first = collection.first {
-                        matched(first)
+                        first
                             .frame(width: collection.count == 1 ? nil : width * Constants.Layout.columnWidthFactor)
                     }
 
                     if collection.count != 1 {
                         VStack(spacing: spacing) {
-                            ForEach(collection.dropFirst()) { matched($0) }
+                            ForEach(collection.dropFirst()) { $0 }
                         }
                     }
                 }
@@ -124,7 +116,7 @@ public struct CompositionalLayout<Content: View>: View {
     @ViewBuilder
     private func layout4(_ collection: [SubviewsCollection.Element]) -> some View {
         HStack(spacing: spacing) {
-            ForEach(collection) { matched($0) }
+            ForEach(collection) { $0 }
         }
         .frame(height: Constants.Layout.lastRowHeight)
     }

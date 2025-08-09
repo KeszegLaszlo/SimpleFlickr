@@ -8,6 +8,14 @@
 import SwiftUI
 
 extension View {
+    public var withCustomScrollTransition: some View {
+        self.modifier(ScrollTransitionModifier())
+    }
+
+    public var withMeshGradientBackground: some View {
+        self.modifier(MeshGradientBackground())
+    }
+
     public func any() -> AnyView {
         AnyView(self)
     }

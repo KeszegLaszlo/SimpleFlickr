@@ -21,7 +21,7 @@ struct CoreBuilder: Builder {
     }
 
     func imageListView(router: AnyRouter) -> some View {
-        ImegeListView(
+        ImageListView(
             presenter: ImageListPresenter(
                 interactor: interactor,
                 router: CoreRouter(router: router, builder: self)

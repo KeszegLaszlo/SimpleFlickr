@@ -38,17 +38,24 @@ public struct CustomTextField: View {
         }
     }
 
+    private let placeholder: LocalizedStringKey
+    private let systemImageName: String?
+
     @FocusState private var isFocused: Bool
     @Binding var searchText: String
 
-    // MARK: - Building blocks
+    @ViewBuilder
     private var searchIcon: some View {
-        Image(systemName: "magnifyingglass")
+        if let systemImageName {
+            Image(systemName: systemImageName)
+        }
     }
 
     private var textFieldView: some View {
-        TextField("Search Photos", text: $searchText)
+        TextField(placeholder, text: $searchText)
             .focused($isFocused)
+            .submitLabel(.done)
+            .onSubmit { isFocused = false }
     }
 
     private var clearButton: some View {
@@ -122,16 +129,18 @@ public struct CustomTextField: View {
 
     @ViewBuilder
     private var textField: some View {
-        let focused = isFocused
-
         VStack(spacing: .zero) {
             decoratedHeader
         }
         .background { backgroundBlur }
-        .visualEffect { content, proxy in
-            content
-                .offset(y: offsetY(proxy, isFocused: focused))
-        }
+        .animation(
+            .spring(
+                response: Constants.Animation.response,
+                dampingFraction: Constants.Animation.dampingFraction,
+                blendDuration: Constants.Animation.blendDuration
+            ),
+            value: isFocused
+        )
     }
 
     public var body: some View {
@@ -139,19 +148,22 @@ public struct CustomTextField: View {
     }
 
     public init(
-        searchText: Binding<String>
+        searchText: Binding<String>,
+        placeholder: LocalizedStringKey,
+        systemImageName: String?
     ) {
         _searchText = searchText
-    }
-
-    nonisolated private func offsetY(_ proxy: GeometryProxy, isFocused: Bool) -> CGFloat {
-        let minY = proxy.frame(in: .scrollView(axis: .vertical)).minY
-        return minY > 0 ? (isFocused ? -minY : 0) : -minY
+        self.systemImageName = systemImageName
+        self.placeholder = placeholder
     }
 }
 
 #Preview {
     @Previewable @State var searchText = ""
 
-    CustomTextField(searchText: $searchText)
+    CustomTextField(
+        searchText: $searchText,
+        placeholder: "Select photos",
+        systemImageName: "magnifyingglass"
+    )
 }

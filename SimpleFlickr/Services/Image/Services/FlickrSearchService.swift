@@ -44,7 +44,7 @@ struct FlickrSearchService: ImageSearchService {
 
             let assets: [ImageAsset] = photos.photo.compactMap { (photo) -> ImageAsset? in
                 // Prefer URLs coming from `extras`, fall back to constructing
-                // https://www.flickr.com/services/api/misc.urls.html
+                // https://www.flickr.com/services/api/miscontainer.urls.html
                 let thumbURL: URL? = photo.thumbnailURL
                     ?? FlickrURLBuilder.url(server: photo.server, id: photo.id, secret: photo.secret, sizeSuffix: "q")
                 let originalURL: URL? = photo.originalURL
@@ -107,25 +107,44 @@ struct FlickrSearchService: ImageSearchService {
 
 // MARK: - Flickr DTOs (scoped internal)
 
-private struct FlickrAPIEnvelope: Codable {
+private struct FlickrAPIEnvelope: Decodable {
     let stat: String
     let code: Int?
     let message: String?
     let photos: FlickrPhotosDTO?
 }
 
-private struct FlickrPhotosDTO: Codable {
+private struct FlickrPhotosDTO: Decodable {
     let page: Int
     let pages: Int
     let perpage: Int
-    // Flickr sometimes returns total as a string
-    let total: String
+    // Flickr may return total as number or string – normalize to Int
+    let totalRaw: Int
     let photo: [FlickrPhotoDTO]
 
-    var totalInt: Int { Int(total) ?? 0 }
+    var totalInt: Int { totalRaw }
+
+    private nonisolated enum CodingKeys: String, CodingKey { case page, pages, perpage, total, photo }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.page = try container.decode(Int.self, forKey: .page)
+        self.pages = try container.decode(Int.self, forKey: .pages)
+        self.perpage = try container.decode(Int.self, forKey: .perpage)
+
+        if let intTotal = try? container.decode(Int.self, forKey: .total) {
+            self.totalRaw = intTotal
+        } else if let stringTotal = try? container.decode(String.self, forKey: .total), let intValue = Int(stringTotal) {
+            self.totalRaw = intValue
+        } else {
+            self.totalRaw = 0
+        }
+
+        self.photo = try container.decode([FlickrPhotoDTO].self, forKey: .photo)
+    }
 }
 
-private struct FlickrPhotoDTO: Codable {
+private struct FlickrPhotoDTO: Decodable {
     let id: String
     let owner: String
     let secret: String
@@ -150,6 +169,35 @@ private struct FlickrPhotoDTO: Codable {
         case thumbnailWidth = "width_q"
         case thumbnailHeight = "height_q"
     }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.owner = try container.decode(String.self, forKey: .owner)
+        self.secret = try container.decode(String.self, forKey: .secret)
+        self.server = try container.decode(String.self, forKey: .server)
+        self.title = (try? container.decode(String.self, forKey: .title)) ?? ""
+        self.thumbnailURL = try? container.decode(URL.self, forKey: .thumbnailURL)
+        self.originalURL = try? container.decode(URL.self, forKey: .originalURL)
+        self.originalWidth = Self.decodeFlexibleIntIfPresent(from: container, forKey: .originalWidth)
+        self.originalHeight = Self.decodeFlexibleIntIfPresent(from: container, forKey: .originalHeight)
+        self.thumbnailWidth = Self.decodeFlexibleIntIfPresent(from: container, forKey: .thumbnailWidth)
+        self.thumbnailHeight = Self.decodeFlexibleIntIfPresent(from: container, forKey: .thumbnailHeight)
+    }
+
+    private static func decodeFlexibleIntIfPresent(
+        from container: KeyedDecodingContainer<CodingKeys>,
+        forKey key: CodingKeys
+    ) -> Int? {
+        if let intValue = try? container.decode(Int.self, forKey: key) {
+            return intValue
+        }
+        if let stringValue = try? container.decode(String.self, forKey: key),
+           let intValue = Int(stringValue) {
+            return intValue
+        }
+        return nil
+    }
 }
 
 // MARK: - Flickr URL builder (fallback if `extras` missing)
@@ -163,43 +211,5 @@ private enum FlickrURLBuilder {
         comps.host = "live.staticflickr.com"
         comps.path = "/\(server)/\(id)_\(secret)_\(sizeSuffix).jpg"
         return comps.url
-    }
-}
-
-enum FlickrImageEndpoint: EndpointProvider {
-    case search(query: String, page: Int, perPage: Int)
-
-    static var injectedAPIKey: String?
-
-    var scheme: String { "https" }
-    var baseURL: String { "api.flickr.com" }
-    var port: Int? { nil }
-    var apiKey: String? { Self.injectedAPIKey }
-    var apiKeyHeaderField: String? { nil }
-    var apiKeyQueryName: String? { "api_key" }
-    var body: [String: Any]? { nil }
-    var mockFile: String? { nil }
-
-    var path: String {
-        "/services/rest"
-    }
-
-    var method: RequestMethod {
-        .get
-    }
-
-    var queryItems: [URLQueryItem]? {
-        switch self {
-        case let .search(query, page, perPage):
-            [
-                .init(name: "method", value: "flickr.photos.search"),
-                .init(name: "text", value: query),
-                .init(name: "page", value: String(page)),
-                .init(name: "per_page", value: String(perPage)),
-                .init(name: "format", value: "json"),
-                .init(name: "nojsoncallback", value: "1"),
-                .init(name: "extras", value: "url_q,url_o,o_dims")
-            ]
-        }
     }
 }

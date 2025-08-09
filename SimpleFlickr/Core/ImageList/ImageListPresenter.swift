@@ -6,6 +6,7 @@
 //
 
 import Observation
+import SwiftUI
 
 @Observable
 @MainActor
@@ -15,9 +16,10 @@ class ImageListPresenter {
 
     private(set) var images = [ImageAsset]()
     private(set) var isLoadingMore = false
-    private(set) var viewState: ImegeListView.ViewState = .loading
+    private(set) var viewState: ImageListView.ViewState = .loading
+    private(set) var layyoutId = 4
 
-    private var emptyReason: ImegeListView.ViewState.EmptyReason {
+    private var emptyReason: ImageListView.ViewState.EmptyReason {
         searchText.isEmpty ? .noFetchedResults : .notFoundForString(searchText: searchText)
     }
 
@@ -38,6 +40,29 @@ class ImageListPresenter {
             viewState = .loaded
         } catch {
             viewState = .empty(emptyReason)
+        }
+    }
+
+    func loadMoreData(image: ImageAsset) {
+        Task {
+            updateLoadingStatus(to: true)
+            defer { updateLoadingStatus(to: false) }
+            do {
+                guard image.id == images.last?.id else { return }
+                let moreImages = try await interactor.loadMoreImages(query: "dog", isPaginating: true)
+                guard !moreImages.isEmpty else { return }
+                await MainActor.run {
+                    images.append(contentsOf: moreImages)
+                }
+            } catch {
+//                interactor.trackEvent(event: Event.messageSeenFail(error: error))
+            }
+        }
+    }
+
+    private func updateLoadingStatus(to isLoading: Bool) {
+        withAnimation {
+            isLoadingMore = isLoading
         }
     }
 

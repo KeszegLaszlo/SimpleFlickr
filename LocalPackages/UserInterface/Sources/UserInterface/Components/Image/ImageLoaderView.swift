@@ -13,7 +13,7 @@ public struct ImageLoaderView: View {
         static let opacity = 0.5
     }
 
-    private let urlString: String
+    private let url: URL
     private let resizingMode: ContentMode
     private let forceTransitionAnimation: Bool
 
@@ -21,7 +21,7 @@ public struct ImageLoaderView: View {
         Rectangle()
             .opacity(Constants.opacity)
             .overlay(
-                WebImage(url: URL(string: urlString))
+                WebImage(url: url)
                     .resizable()
                     .indicator(.activity)
                     .aspectRatio(contentMode: resizingMode)
@@ -35,18 +35,18 @@ public struct ImageLoaderView: View {
     }
 
     public init(
-        urlString: String,
+        url: URL,
         resizingMode: ContentMode = .fill,
         forceTransitionAnimation: Bool = false
     ) {
-        self.urlString = urlString
+        self.url = url
         self.resizingMode = resizingMode
         self.forceTransitionAnimation = forceTransitionAnimation
     }
 }
 
 #Preview {
-    ImageLoaderView(urlString: "https://picsum.photos/600/600")
+    ImageLoaderView(url: URL(string: "https://picsum.photos/600/600")!)
         .frame(width: 100, height: 200)
         .anyButton(.highlight) { }
 }
