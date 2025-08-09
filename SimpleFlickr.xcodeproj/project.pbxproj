@@ -29,7 +29,25 @@
 		DA206C752E473FF5002D458B /* SimpleFlickrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleFlickrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DA079AF32E474CDD009DC2F6 /* Exceptions for "LocalPackages" folder in "SimpleFlickr" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Logger,
+			);
+			target = DA206C5D2E473FF3002D458B /* SimpleFlickr */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		DA079AF12E474CC2009DC2F6 /* LocalPackages */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DA079AF32E474CDD009DC2F6 /* Exceptions for "LocalPackages" folder in "SimpleFlickr" target */,
+			);
+			path = LocalPackages;
+			sourceTree = "<group>";
+		};
 		DA206C602E473FF3002D458B /* SimpleFlickr */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SimpleFlickr;
@@ -75,6 +93,7 @@
 		DA206C552E473FF3002D458B = {
 			isa = PBXGroup;
 			children = (
+				DA079AF12E474CC2009DC2F6 /* LocalPackages */,
 				DA206C602E473FF3002D458B /* SimpleFlickr */,
 				DA206C6E2E473FF5002D458B /* SimpleFlickrTests */,
 				DA206C782E473FF5002D458B /* SimpleFlickrUITests */,
@@ -109,6 +128,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				DA079AF12E474CC2009DC2F6 /* LocalPackages */,
 				DA206C602E473FF3002D458B /* SimpleFlickr */,
 			);
 			name = SimpleFlickr;
