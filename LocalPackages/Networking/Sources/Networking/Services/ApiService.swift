@@ -74,6 +74,9 @@ public final class ApiService: ApiProtocol {
         } catch {
             throw ApiServiceError.transport(error)
         }
+        if let body = String(data: data, encoding: .utf8) {
+            print("📥 Response body:\n\(body)")
+        }
         try validate(response, data: data)
         return try decode(T.self, from: data)
     }
@@ -121,6 +124,12 @@ public final class ApiService: ApiProtocol {
         do {
             return try decoder.decode(T.self, from: data)
         } catch {
+            if let body = String(data: data, encoding: .utf8) {
+                print("⚠️ Decoding failed. Raw response:\n\(body)")
+            } else {
+                print("⚠️ Decoding failed and could not decode response as UTF-8.")
+            }
+            print("⚠️ Decoding error: \(error)")
             throw ApiServiceError.decoding(error)
         }
     }

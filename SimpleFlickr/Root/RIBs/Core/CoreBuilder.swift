@@ -7,12 +7,25 @@
 
 import SwiftUI
 import UserInterface
+import Router
 
 @MainActor
 struct CoreBuilder: Builder {
     let interactor: CoreInteractor
 
     func build() -> AnyView {
-        Text("Core").any()
+        RouterView { router in
+            imageListView(router: router)
+        }
+        .any()
+    }
+
+    func imageListView(router: AnyRouter) -> some View {
+        ImegeListView(
+            presenter: ImageListPresenter(
+                interactor: interactor,
+                router: CoreRouter(router: router, builder: self)
+            )
+        )
     }
 }

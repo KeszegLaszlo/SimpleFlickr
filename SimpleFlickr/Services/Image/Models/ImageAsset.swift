@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ImageAsset: Hashable, Codable {
+struct ImageAsset: Hashable, Codable, Identifiable {
     struct Size: Hashable, Codable {
         public let width: Int?
         public let height: Int?

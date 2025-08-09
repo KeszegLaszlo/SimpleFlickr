@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import Logger
 
 @MainActor
-struct CoreInteractor {
+struct CoreInteractor: GlobalInteractor {
     private let logManager: LogManager
     private let imageSearchManager: ImageSearchManager
 
@@ -40,5 +41,22 @@ struct CoreInteractor {
             isPaginating: isPaginating,
             forceRefresh: true
         )
+    }
+
+    // MARK: Logger
+    func trackEvent(eventName: String, parameters: [String : Any]?, type: LogType) {
+        logManager.trackEvent(eventName: eventName, parameters: parameters, type: type)
+    }
+
+    func trackEvent(event: AnyLoggableEvent) {
+        logManager.trackEvent(event: event)
+    }
+
+    func trackEvent(event: any LoggableEvent) {
+        logManager.trackScreenView(event: event)
+    }
+
+    func trackScreenEvent(event: any LoggableEvent) {
+        logManager.trackScreenView(event: event)
     }
 }
