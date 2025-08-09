@@ -14,7 +14,7 @@ public struct FirebaseCrashlyticsService: LogService {
     
     public init() {}
 
-    public func trackEvent(event: LoggableEvent) {
+    public func trackEvent(event: any LoggableEvent) {
         // Note: Firebase Analytics automatically log breadcrumbs to Crashlytics
         // Therefore, no need to send typical events herein
         // https://firebase.google.com/docs/crashlytics/customize-crash-reports?hl=en&authuser=1&_gl=1*ntknz4*_ga*MTg3MDE4MjY5OC4xNzE3ODAzNTUw*_ga_CW55HF8NVT*MTcyOTg2MDMwNS42My4xLjE3Mjk4NjA2MTcuMjQuMC4w&platform=ios#get-breadcrumb-logs

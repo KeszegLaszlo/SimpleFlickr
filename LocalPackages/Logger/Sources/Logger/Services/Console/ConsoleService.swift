@@ -16,7 +16,7 @@ public struct ConsoleService: LogService {
         self.printParameters = printParameters
     }
 
-    public func trackEvent(event: LoggableEvent) {
+    public func trackEvent(event: any LoggableEvent) {
         var value = "\(event.type.emoji) \(event.eventName)"
         if printParameters, let params = event.parameters, !params.isEmpty {
             let sortedKeys = params.keys.sorted()

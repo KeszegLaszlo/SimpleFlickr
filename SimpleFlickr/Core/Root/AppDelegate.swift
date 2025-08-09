@@ -42,18 +42,20 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 }
 
 enum BuildConfiguration {
-    case mock, dev, prodfeat
+    case mock, dev, prod
     
     func configure() {
         switch self {
         case .mock:
             // Mock build does NOT run Firebase
-            break
+            break //TODO: remove
         case .dev:
+            break //TODO: remove
             let plist = Bundle.main.path(forResource: "GoogleService-Info-Dev", ofType: "plist")!
             let options = FirebaseOptions(contentsOfFile: plist)!
             FirebaseApp.configure(options: options)
         case .prod:
+            break
             let plist = Bundle.main.path(forResource: "GoogleService-Info-Prod", ofType: "plist")!
             let options = FirebaseOptions(contentsOfFile: plist)!
             FirebaseApp.configure(options: options)

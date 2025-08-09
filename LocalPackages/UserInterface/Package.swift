@@ -2,11 +2,7 @@
 import PackageDescription
 
 let swiftSettings: [SwiftSetting] = [
-    .enableUpcomingFeature("BareSlashRegexLiterals"),
-    .enableUpcomingFeature("ConciseMagicFile"),
     .enableUpcomingFeature("ExistentialAny"),
-    .enableUpcomingFeature("ForwardTrailingClosures"),
-    .enableUpcomingFeature("ImplicitOpenExistentials"),
     .enableUpcomingFeature("StrictConcurrency"),
     .unsafeFlags(["-warn-concurrency", "-enable-actor-data-race-checks"])
 ]

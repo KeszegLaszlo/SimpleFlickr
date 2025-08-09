@@ -6,6 +6,6 @@
 //
 
 public protocol LogService: Sendable {
-    func trackEvent(event: LoggableEvent)
-    func trackScreenView(event: LoggableEvent)
+    func trackEvent(event: any LoggableEvent)
+    func trackScreenView(event: any LoggableEvent)
 }
