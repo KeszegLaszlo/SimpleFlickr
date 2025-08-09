@@ -10,7 +10,7 @@ let swiftSettings: [SwiftSetting] = [
 let package = Package(
     name: "Networking",
     platforms: [
-        .iOS(.v17),
+        .iOS(.v18),
         .macOS(.v14)
     ],
     products: [
