@@ -16,6 +16,7 @@
 		DA0808CA2E4779F900DECBB4 /* Router in Frameworks */ = {isa = PBXBuildFile; productRef = DA0808C92E4779F900DECBB4 /* Router */; };
 		DA0808CD2E477A0700DECBB4 /* UserInterface in Frameworks */ = {isa = PBXBuildFile; productRef = DA0808CC2E477A0700DECBB4 /* UserInterface */; };
 		DA0808D02E477A1900DECBB4 /* Utilities in Frameworks */ = {isa = PBXBuildFile; productRef = DA0808CF2E477A1900DECBB4 /* Utilities */; };
+		DA19B7022E47BAE600887078 /* CustomNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = DA19B7012E47BAE600887078 /* CustomNetworking */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +94,7 @@
 				DA0808D02E477A1900DECBB4 /* Utilities in Frameworks */,
 				DA0808C52E4779E000DECBB4 /* LoggerFirebaseAnalytics in Frameworks */,
 				DA0808CD2E477A0700DECBB4 /* UserInterface in Frameworks */,
+				DA19B7022E47BAE600887078 /* CustomNetworking in Frameworks */,
 				DA079DD02E476BD4009DC2F6 /* FirebaseCrashlytics in Frameworks */,
 				DA0808C72E4779E000DECBB4 /* LoggerFirebaseCrashlytics in Frameworks */,
 			);
@@ -167,6 +169,7 @@
 				DA0808C92E4779F900DECBB4 /* Router */,
 				DA0808CC2E477A0700DECBB4 /* UserInterface */,
 				DA0808CF2E477A1900DECBB4 /* Utilities */,
+				DA19B7012E47BAE600887078 /* CustomNetworking */,
 			);
 			productName = SimpleFlickr;
 			productReference = DA206C5E2E473FF3002D458B /* SimpleFlickr.app */;
@@ -256,6 +259,7 @@
 				DA0808C82E4779F900DECBB4 /* XCLocalSwiftPackageReference "LocalPackages/Router" */,
 				DA0808CB2E477A0700DECBB4 /* XCLocalSwiftPackageReference "LocalPackages/UserInterface" */,
 				DA0808CE2E477A1900DECBB4 /* XCLocalSwiftPackageReference "LocalPackages/Utilities" */,
+				DA19B7002E47BAE600887078 /* XCLocalSwiftPackageReference "LocalPackages/Networking" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = DA206C5F2E473FF3002D458B /* Products */;
@@ -910,6 +914,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = LocalPackages/Utilities;
 		};
+		DA19B7002E47BAE600887078 /* XCLocalSwiftPackageReference "LocalPackages/Networking" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = LocalPackages/Networking;
+		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -962,6 +970,10 @@
 		DA0808CF2E477A1900DECBB4 /* Utilities */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Utilities;
+		};
+		DA19B7012E47BAE600887078 /* CustomNetworking */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CustomNetworking;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -13,12 +13,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     var dependencies: Dependencies!
     var builder: RootBuilder!
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
         
         var config: BuildConfiguration
         
         #if MOCK
-        config = .mock(isSignedIn: true)
+        config = .mock
         #elseif DEV
         config = .dev
         #else

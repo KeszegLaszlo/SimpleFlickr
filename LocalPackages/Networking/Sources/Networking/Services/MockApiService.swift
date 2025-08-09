@@ -7,11 +7,14 @@
 
 import Foundation
 
-class MockApiService: Mockable, ApiProtocol {
-    func asyncRequest<T>(endpoint: any EndpointProvider) async throws -> T where T: Decodable {
+public class MockApiService: Mockable, ApiProtocol {
+    public init() {}
+
+    public func asyncRequest<T>(endpoint: any EndpointProvider) async throws -> T where T: Decodable {
         guard let mockFile = endpoint.mockFile else {
             throw ApiServiceError.endpoint(.invalidURL)
         }
         return loadJSON(filename: mockFile, type: T.self)
     }
 }
+

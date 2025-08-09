@@ -13,7 +13,7 @@ public enum EndpointError: Error {
 }
 
 /// Protocol defining the requirements for constructing network endpoints.
-protocol EndpointProvider {
+public protocol EndpointProvider {
     /// The URL scheme (e.g., "https").
     var scheme: String { get }
     /// The base URL or host (e.g., "api.example.com").
@@ -40,7 +40,7 @@ protocol EndpointProvider {
     var currentLanguageCode: String { get }
 }
 
-extension EndpointProvider {
+public extension EndpointProvider {
     /// Default: no header-based key
     var apiKeyHeaderField: String? { nil }
     /// Default: no query-based key
@@ -49,7 +49,7 @@ extension EndpointProvider {
     var currentLanguageCode: String { Locale.current.language.languageCode?.identifier ?? "en" }
 }
 
-extension EndpointProvider {
+public extension EndpointProvider {
     @MainActor
     func asURLRequest() throws -> URLRequest {
 

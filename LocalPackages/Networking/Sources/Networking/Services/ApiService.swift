@@ -25,11 +25,11 @@ public enum ApiServiceError: Error {
 /// A generic network service for performing API requests and decoding responses.
 ///
 /// `ApiService` provides methods to asynchronously fetch and decode data from endpoints conforming to `EndpointProvider`.
-final class ApiService: ApiProtocol {
-    private enum Constants {
-        static let timeoutIntervalForRequest: TimeInterval = 60
-        static let timeoutIntervalForResource: TimeInterval = 300
-        static let acceptedStatusCodes = 200...299
+public final class ApiService: ApiProtocol {
+    public enum Constants {
+        public static let timeoutIntervalForRequest: TimeInterval = 60
+        public static let timeoutIntervalForResource: TimeInterval = 300
+        public static let acceptedStatusCodes = 200...299
     }
     private let decoder: JSONDecoder
     private let session: URLSession
@@ -39,7 +39,7 @@ final class ApiService: ApiProtocol {
     /// - Parameters:
     ///   - session: The `URLSession` used for network requests. Defaults to a session with standard configuration and timeouts.
     ///   - decoder: The `JSONDecoder` used for decoding response data. Defaults to an ISO8601 date decoding strategy.
-    init(
+    public init(
         /// The `URLSession` used for network requests. Defaults to a session with waits for connectivity and custom timeouts.
         session: URLSession = {
             let configuration = URLSessionConfiguration.default
@@ -66,7 +66,7 @@ final class ApiService: ApiProtocol {
     ///   - endpoint: The endpoint describing the request to be performed.
     /// - Returns: The decoded response of type `T`.
     /// - Throws: `ApiServiceError` if the request fails, the response is invalid, or decoding fails.
-    func asyncRequest<T: Decodable>(endpoint: any EndpointProvider) async throws -> T {
+    public func asyncRequest<T: Decodable>(endpoint: any EndpointProvider) async throws -> T {
         let request = try makeRequest(from: endpoint)
         let (data, response): (Data, URLResponse)
         do {
@@ -125,3 +125,4 @@ final class ApiService: ApiProtocol {
         }
     }
 }
+

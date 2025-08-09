@@ -1,4 +1,4 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.1
 import PackageDescription
 
 let swiftSettings: [SwiftSetting] = [
@@ -8,13 +8,13 @@ let swiftSettings: [SwiftSetting] = [
 ]
 
 let package = Package(
-    name: "Networking",
+    name: "CustomNetworking",
     platforms: [
         .iOS(.v18),
         .macOS(.v14)
     ],
     products: [
-        .library(name: "Networking", targets: ["Networking"])
+        .library(name: "CustomNetworking", targets: ["CustomNetworking"])
     ],
     dependencies: [
         .package(url: "https://github.com/realm/SwiftLint", exact: "0.57.1"),
@@ -22,7 +22,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Networking",
+            name: "CustomNetworking",
             dependencies: [
                 .product(name: "Logger", package: "Logger")
             ],
@@ -30,8 +30,8 @@ let package = Package(
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
         ),
         .testTarget(
-            name: "NetworkingTests",
-            dependencies: ["Networking"]
+            name: "CustomNetworkingTests",
+            dependencies: ["CustomNetworking"]
         )
     ]
 )

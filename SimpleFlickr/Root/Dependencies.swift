@@ -10,6 +10,7 @@ import Logger
 import LoggerFirebaseAnalytics
 import LoggerFirebaseCrashlytics
 import Router
+import CustomNetworking
 
 typealias AnyRouter = Router.RouterProtocol
 typealias RouterView = Router.RouterView
@@ -20,6 +21,10 @@ typealias LogService = Logger.LogService
 typealias AnyLoggableEvent = Logger.AnyLoggableEvent
 typealias FirebaseAnalyticsService = LoggerFirebaseAnalytics.FirebaseAnalyticsService
 
+typealias ApiProtocol = CustomNetworking.ApiProtocol
+typealias EndpointProvider = CustomNetworking.EndpointProvider
+typealias RequestMethod = CustomNetworking.RequestMethod
+
 @MainActor
 struct Dependencies {
     let container: DependencyContainer
@@ -27,12 +32,16 @@ struct Dependencies {
 
     // swiftlint:disable:next function_body_length
     init(config: BuildConfiguration) {
+        let imageSearchService: ImageSearchService
+        let apiService: any ApiProtocol
 
         switch config {
         case .mock:
             logManager = LogManager(services: [
                 ConsoleService(printParameters: false)
             ])
+            apiService = MockApiService()
+            imageSearchService = MockImageSearchService(apiClient: apiService)
 
         case .dev:
             logManager = LogManager(services: [
@@ -40,17 +49,27 @@ struct Dependencies {
                 FirebaseAnalyticsService(),
                 FirebaseCrashlyticsService()
             ])
+            apiService = ApiService()
+            imageSearchService = FlickrSearchService(
+                apiKey: "65803e8f6e4a3982200621cad356be51", //TODO: Remove from here
+                apiClient: apiService
+            )
 
         case .prod:
             logManager = LogManager(services: [
                 FirebaseAnalyticsService(),
                 FirebaseCrashlyticsService()
             ])
-
+            apiService = ApiService()
+            imageSearchService = FlickrSearchService(
+                apiKey: "65803e8f6e4a3982200621cad356be51", //TODO: Remove from here
+                apiClient: apiService
+            )
         }
-                
-        let container = DependencyContainer()
 
+        let container = DependencyContainer()
+        container.register(LogManager.self, service: logManager)
+        container.register(ImageSearchService.self, service: imageSearchService)
         self.container = container
     }
 }
@@ -65,18 +84,23 @@ extension View {
 @MainActor
 class DevPreview {
     static let shared = DevPreview()
-    
+    let logManager: LogManager
+    let apiService: any ApiProtocol
+    let imageSearchService: ImageSearchService
+
+    init() {
+        self.logManager = LogManager(services: [])
+        self.apiService = MockApiService()
+        self.imageSearchService = MockImageSearchService(apiClient: apiService)
+    }
+
     func container() -> DependencyContainer {
         let container = DependencyContainer()
 
         container.register(LogManager.self, service: logManager)
+        container.register(ImageSearchService.self, service: imageSearchService)
 
         return container
     }
-
-    let logManager: LogManager
-
-    init(isSignedIn: Bool = true) {
-        self.logManager = LogManager(services: [])
-    }
 }
+
