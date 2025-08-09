@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RouterView<Content: View>: View, Router {
+public struct RouterView<Content: View>: View, RouterProtocol {
 
     @Environment(\.dismiss) private var dismiss
 
@@ -29,19 +29,19 @@ struct RouterView<Content: View>: View, Router {
     @Binding var screenStack: [AnyDestination]
 
     var addNavigationView: Bool
-    @ViewBuilder var content: (any Router) -> Content
+    @ViewBuilder var content: (any RouterProtocol) -> Content
 
-    init(
+    public init(
         screenStack: (Binding<[AnyDestination]>)? = nil,
         addNavigationView: Bool = true,
-        content: @escaping (any Router) -> Content
+        content: @escaping (any RouterProtocol) -> Content
     ) {
         self._screenStack = screenStack ?? .constant([])
         self.addNavigationView = addNavigationView
         self.content = content
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationStackIfNeeded(path: $path, addNavigationView: addNavigationView) {
             content(self)
                 .sheetViewModifier(screen: $showSheet)
@@ -54,7 +54,10 @@ struct RouterView<Content: View>: View, Router {
         .environment(\.router, self)
     }
 
-    func showScreen<T: View>(_ option: SegueOption, @ViewBuilder destination: @escaping (any Router) -> T) {
+    public func showScreen<T: View>(
+        _ option: SegueOption,
+        @ViewBuilder destination: @escaping (any RouterProtocol) -> T
+    ) {
         let screen = RouterView<T>(
             screenStack: option.shouldAddNewNavigationView ? nil : (screenStack.isEmpty ? $path : $screenStack),
             addNavigationView: option.shouldAddNewNavigationView
@@ -80,11 +83,11 @@ struct RouterView<Content: View>: View, Router {
         }
     }
 
-    func dismissScreen() {
+    public func dismissScreen() {
         dismiss()
     }
 
-    func showAlert(
+    public func showAlert(
         _ option: AlertType,
         title: LocalizedStringKey,
         subtitle: LocalizedStringKey? = nil,
@@ -97,21 +100,21 @@ struct RouterView<Content: View>: View, Router {
         self.alert = AnyAppAlert(title: title, subtitle: subtitle, buttons: buttons)
     }
 
-    func dismissAlert() {
+    public func dismissAlert() {
         alert = nil
     }
 
-    func showLoader(show: Bool) {
+    public func showLoader(show: Bool) {
         showLoader = show
     }
 
-    func showInfo(text: LocalizedStringKey) {
+    public func showInfo(text: LocalizedStringKey) {
         withAnimation {
             infoText = text
         }
     }
 
-    func showModal<T: View>(
+    public func showModal<T: View>(
         backgroundColor: Color,
         transition: AnyTransition,
         @ViewBuilder destination: @escaping () -> T
@@ -122,7 +125,7 @@ struct RouterView<Content: View>: View, Router {
         self.modal = destination
     }
 
-    func dismissModal() {
+    public func dismissModal() {
         modal = nil
     }
 }

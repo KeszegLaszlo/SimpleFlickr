@@ -8,12 +8,15 @@
 import SwiftUI
 
 extension EnvironmentValues {
-    @Entry var router: any Router = MockRouter()
+    @Entry var router: any RouterProtocol = MockRouter()
 }
 
 @MainActor
-protocol Router {
-    func showScreen<T: View>(_ option: SegueOption, @ViewBuilder destination: @escaping (any Router) -> T)
+public protocol RouterProtocol {
+    func showScreen<T: View>(
+        _ option: SegueOption,
+        @ViewBuilder destination: @escaping (any RouterProtocol) -> T
+    )
     func dismissScreen()
 
     func showAlert(
@@ -35,14 +38,14 @@ protocol Router {
     func showInfo(text: LocalizedStringKey)
 }
 
-struct MockRouter: Router {
+struct MockRouter: RouterProtocol {
     func showInfo(text: LocalizedStringKey) {
         print("Mock router does not work.")
     }
 
     func showScreen<T: View>(
         _ option: SegueOption,
-        @ViewBuilder destination: @escaping (any Router) -> T
+        @ViewBuilder destination: @escaping (any RouterProtocol) -> T
     ) where T: View {
         print("Mock router does not work.")
     }

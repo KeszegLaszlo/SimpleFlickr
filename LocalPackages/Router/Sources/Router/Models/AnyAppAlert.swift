@@ -8,12 +8,12 @@
 import SwiftUI
 
 @MainActor
-struct AnyAppAlert: Sendable {
+public struct AnyAppAlert: Sendable {
     var title: LocalizedStringKey
     var subtitle: LocalizedStringKey?
     var buttons: @Sendable () -> AnyView
 
-    init(
+    public init(
         title: LocalizedStringKey,
         subtitle: LocalizedStringKey? = nil,
         buttons: (@Sendable () -> AnyView)? = nil
@@ -29,7 +29,7 @@ struct AnyAppAlert: Sendable {
         }
     }
 
-    init(error: any Error) {
+    public init(error: any Error) {
         self.init(title: "Error", subtitle: LocalizedStringKey(error.localizedDescription), buttons: nil)
     }
 }
