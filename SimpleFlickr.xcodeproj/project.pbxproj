@@ -34,6 +34,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Logger,
+				Networking,
 			);
 			target = DA206C5D2E473FF3002D458B /* SimpleFlickr */;
 		};

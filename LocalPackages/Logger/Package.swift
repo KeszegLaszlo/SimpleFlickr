@@ -1,5 +1,15 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.1
 import PackageDescription
+
+let swiftSettings: [SwiftSetting] = [
+    .enableUpcomingFeature("BareSlashRegexLiterals"),
+    .enableUpcomingFeature("ConciseMagicFile"),
+    .enableUpcomingFeature("ExistentialAny"),
+    .enableUpcomingFeature("ForwardTrailingClosures"),
+    .enableUpcomingFeature("ImplicitOpenExistentials"),
+    .enableUpcomingFeature("StrictConcurrency"),
+    .unsafeFlags(["-warn-concurrency", "-enable-actor-data-race-checks"])
+]
 
 let package = Package(
     name: "Logger",
@@ -13,6 +23,7 @@ let package = Package(
         .library(name: "LoggerFirebaseCrashlytics", targets: ["LoggerFirebaseCrashlytics"])
     ],
     dependencies: [
+        .package(url: "https://github.com/realm/SwiftLint", exact: "0.57.1"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "11.0.0")
     ],
     targets: [
@@ -34,7 +45,9 @@ let package = Package(
             dependencies: [
                 "Logger",
                 .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk")
-            ]
+            ],
+            swiftSettings: swiftSettings,
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
         ),
 
         .testTarget(
