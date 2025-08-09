@@ -32,7 +32,8 @@ struct Dependencies {
 
     // swiftlint:disable:next function_body_length
     init(config: BuildConfiguration) {
-        let imageSearchService: ImageSearchService
+        let imageSearchService: any ImageSearchService
+        let localSearchHistoryService: any LocalSearchHistoryPersistence
         let apiService: any ApiProtocol
 
         switch config {
@@ -42,6 +43,7 @@ struct Dependencies {
             ])
             apiService = MockApiService()
             imageSearchService = MockImageSearchService(apiClient: apiService)
+            localSearchHistoryService = MockLocalSearchHistoryPersistence()
 
         case .dev:
             logManager = LogManager(services: [
@@ -54,6 +56,7 @@ struct Dependencies {
                 apiKey: "65803e8f6e4a3982200621cad356be51", //TODO: Remove from here
                 apiClient: apiService
             )
+            localSearchHistoryService = SwiftDataLocalSearchHistoryPersistence()
 
         case .prod:
             logManager = LogManager(services: [
@@ -65,11 +68,13 @@ struct Dependencies {
                 apiKey: "65803e8f6e4a3982200621cad356be51", //TODO: Remove from here
                 apiClient: apiService
             )
+            localSearchHistoryService = SwiftDataLocalSearchHistoryPersistence()
         }
 
         let container = DependencyContainer()
         container.register(LogManager.self, service: logManager)
         container.register(ImageSearchService.self, service: imageSearchService)
+        container.register(LocalSearchHistoryPersistence.self, service: localSearchHistoryService)
         self.container = container
     }
 }
@@ -86,12 +91,14 @@ class DevPreview {
     static let shared = DevPreview()
     let logManager: LogManager
     let apiService: any ApiProtocol
-    let imageSearchService: ImageSearchService
+    let imageSearchService: any ImageSearchService
+    let localSearchHistoryService: any LocalSearchHistoryPersistence
 
     init() {
         self.logManager = LogManager(services: [])
         self.apiService = MockApiService()
         self.imageSearchService = MockImageSearchService(apiClient: apiService)
+        localSearchHistoryService = MockLocalSearchHistoryPersistence()
     }
 
     func container() -> DependencyContainer {
@@ -99,6 +106,7 @@ class DevPreview {
 
         container.register(LogManager.self, service: logManager)
         container.register(ImageSearchService.self, service: imageSearchService)
+        container.register(LocalSearchHistoryPersistence.self, service: localSearchHistoryService)
 
         return container
     }

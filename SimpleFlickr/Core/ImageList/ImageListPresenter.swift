@@ -15,6 +15,7 @@ class ImageListPresenter {
     private let router: any ImageListRouter
 
     private(set) var images = [ImageAsset]()
+    private(set) var searchResults = [SearchElementModel]()
     private(set) var isLoadingMore = false
     private(set) var viewState: ImageListView.ViewState = .loading
     private(set) var layyoutId = 4
@@ -23,21 +24,31 @@ class ImageListPresenter {
         searchText.isEmpty ? .noFetchedResults : .notFoundForString(searchText: searchText)
     }
 
-    var searchText = ""
+    var searchText = "dog"
 
     init(interactor: any ImageListInteractor, router: any ImageListRouter) {
         self.interactor = interactor
         self.router = router
+        getLatestSearch()
     }
 
     func onSelectImage(_ image: ImageAsset) {
         router.showImageDetails(delegate: .init(image: image))
     }
 
+    func addNewSearchToHistory() {
+        do {
+            let searchModel: SearchElementModel = .init(title: searchText)
+            try interactor.addRecentSearch(seach: searchModel)
+            searchResults.insert(searchModel, at: .zero)
+        } catch  {
+        }
+    }
+
     func loadInitialImages() async {
         viewState = .loading
         do {
-            let fetchedImages = try await interactor.getInitialMessages(query: "dog")
+            let fetchedImages = try await interactor.getInitialMessages(query: searchText)
             await MainActor.run {
                 images = fetchedImages
             }
@@ -53,7 +64,7 @@ class ImageListPresenter {
             defer { updateLoadingStatus(to: false) }
             do {
                 guard image.id == images.last?.id else { return }
-                let moreImages = try await interactor.loadMoreImages(query: "dog", isPaginating: true)
+                let moreImages = try await interactor.loadMoreImages(query: searchText, isPaginating: true)
                 guard !moreImages.isEmpty else { return }
                 await MainActor.run {
                     images.append(contentsOf: moreImages)
@@ -61,6 +72,17 @@ class ImageListPresenter {
             } catch {
 //                interactor.trackEvent(event: Event.messageSeenFail(error: error))
             }
+        }
+    }
+
+    private func getLatestSearch() {
+        do {
+            if let lastSearch = try interactor.getMostRecentSearch() {
+                searchText = lastSearch.title
+            }
+            searchResults = try interactor.getSearchHistory()
+        } catch {
+            // nteractor.trackEvent(event: Event.messageSeenFail(error: error))
         }
     }
 

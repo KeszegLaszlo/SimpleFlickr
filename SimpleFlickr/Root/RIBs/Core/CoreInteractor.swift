@@ -12,11 +12,15 @@ import Logger
 struct CoreInteractor: GlobalInteractor {
     private let logManager: LogManager
     private let imageSearchManager: ImageSearchManager
-
     init(container: DependencyContainer) {
-        self.logManager = container.resolve(LogManager.self)!
+        logManager = container.resolve(LogManager.self)!
         let imageSearchService = container.resolve(ImageSearchService.self)!
-        self.imageSearchManager = ImageSearchManager(service: imageSearchService, logManager: logManager)
+        let localSearchHistoryService = container.resolve(LocalSearchHistoryPersistence.self)!
+        imageSearchManager = ImageSearchManager(
+            service: imageSearchService,
+            localService: localSearchHistoryService,
+            logManager: logManager
+        )
     }
 
     func getInitialMessages(
@@ -43,9 +47,26 @@ struct CoreInteractor: GlobalInteractor {
         )
     }
 
+    //MARK: LocalPersistence
+    func addRecentSearch(seach: SearchElementModel) throws {
+        try imageSearchManager.addRecentSearch(seach: seach)
+    }
+
+    func getSearchHistory() throws -> [SearchElementModel] {
+        try imageSearchManager.getSearchHistory()
+    }
+
+    func getMostRecentSearch() throws -> SearchElementModel? {
+        try imageSearchManager.recentSearch()
+    }
+
     // MARK: Logger
     func trackEvent(eventName: String, parameters: [String : Any]?, type: LogType) {
-        logManager.trackEvent(eventName: eventName, parameters: parameters, type: type)
+        logManager.trackEvent(
+            eventName: eventName,
+            parameters: parameters,
+            type: type
+        )
     }
 
     func trackEvent(event: AnyLoggableEvent) {

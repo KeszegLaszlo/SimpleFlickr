@@ -20,6 +20,10 @@ protocol ImageListInteractor {
             isPaginating: Bool,
             forceRefresh: Bool
         ) async throws -> [ImageAsset]
+
+    func addRecentSearch(seach: SearchElementModel) throws
+    func getSearchHistory() throws -> [SearchElementModel]
+    func getMostRecentSearch() throws -> SearchElementModel?
 }
 
 extension ImageListInteractor {

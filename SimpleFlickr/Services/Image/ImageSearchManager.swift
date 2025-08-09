@@ -16,16 +16,31 @@ class ImageSearchManager {
     }
 
     private let service: any ImageSearchService
+    private let localService: any LocalSearchHistoryPersistence
     private let logManager: LogManager
 
     private var imageCache: [String: (items: [ImageAsset], nextPage: Int)] = [:]
 
     init(
         service: any ImageSearchService,
+        localService: any LocalSearchHistoryPersistence,
         logManager: LogManager
     ) {
         self.service = service
+        self.localService = localService
         self.logManager = logManager
+    }
+
+    func addRecentSearch(seach: SearchElementModel) throws {
+        try localService.addRecentSearch(seach: seach)
+    }
+
+    func getSearchHistory() throws -> [SearchElementModel] {
+        try localService.getSearchHistory()
+    }
+
+    func recentSearch() throws -> SearchElementModel? {
+        try localService.getMostRecentSearch()
     }
 
     func searchImages(

@@ -40,7 +40,9 @@ public struct CustomTextField: View {
 
     private let placeholder: LocalizedStringKey
     private let systemImageName: String?
+    private let submitLabel: SubmitLabel
 
+    private var onSubmit: @Sendable () -> Void
     @FocusState private var isFocused: Bool
     @Binding var searchText: String
 
@@ -54,8 +56,11 @@ public struct CustomTextField: View {
     private var textFieldView: some View {
         TextField(placeholder, text: $searchText)
             .focused($isFocused)
-            .submitLabel(.done)
-            .onSubmit { isFocused = false }
+            .submitLabel(submitLabel)
+            .onSubmit {
+                isFocused = false
+                onSubmit()
+            }
     }
 
     private var clearButton: some View {
@@ -150,11 +155,15 @@ public struct CustomTextField: View {
     public init(
         searchText: Binding<String>,
         placeholder: LocalizedStringKey,
-        systemImageName: String?
+        systemImageName: String?,
+        submitLabel: SubmitLabel = .search,
+        onSubmit: @escaping @Sendable () -> Void
     ) {
         _searchText = searchText
         self.systemImageName = systemImageName
         self.placeholder = placeholder
+        self.submitLabel = submitLabel
+        self.onSubmit = onSubmit
     }
 }
 
@@ -165,5 +174,5 @@ public struct CustomTextField: View {
         searchText: $searchText,
         placeholder: "Select photos",
         systemImageName: "magnifyingglass"
-    )
+    ) {}
 }

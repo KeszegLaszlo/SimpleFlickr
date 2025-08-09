@@ -18,8 +18,8 @@ struct ImageListView: View {
         static let textfieldImageName: String = "magnifyingglass"
     }
 
-    enum ViewState {
-        enum EmptyReason { case notFoundForString(searchText: String), noFetchedResults}
+    enum ViewState: Equatable {
+        enum EmptyReason: Equatable { case notFoundForString(searchText: String), noFetchedResults}
         case empty(EmptyReason), loading, loaded
     }
 
@@ -34,6 +34,39 @@ struct ImageListView: View {
                 ProgressView().tint(.accent)
             case .loaded:
                 loadedView
+            }
+        }
+        .safeAreaInset(edge: .top, spacing: .zero) {
+            if presenter.viewState != .loading {
+                VStack(spacing: .zero) {
+                    searchField
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(presenter.searchResults) { search in
+                                Text(search.title)
+                                    .font(.callout.bold())
+                                    .padding(.horizontal, 18)
+                                    .padding(.vertical, 8)
+                                    .background(
+                                        LinearGradient(
+                                            colors: [Color.accentColor.opacity(0.88), Color.accentColor.opacity(0.52)],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+                                    )
+                                    .foregroundStyle(.white)
+                                    .clipShape(Capsule())
+                                    .shadow(color: Color.accentColor.opacity(0.25), radius: 4, x: 0, y: 2)
+                                    .overlay(
+                                        Capsule().stroke(Color.white.opacity(0.25), lineWidth: 1)
+                                    )
+                                    .animation(.smooth, value: search.title)
+                            }
+                        }
+                        .padding(.horizontal)
+                        .padding(.vertical, 4)
+                    }
+                }
             }
         }
         .withMeshGradientBackground
@@ -77,9 +110,6 @@ struct ImageListView: View {
             .padding(15)
         }
         .scrollIndicators(.hidden)
-        .safeAreaInset(edge: .top, spacing: .zero) {
-            searchField
-        }
         .scrollDismissesKeyboard(.immediately)
         .scrollTargetLayout()
         .onTapGesture {
@@ -92,7 +122,12 @@ struct ImageListView: View {
             searchText: $presenter.searchText,
             placeholder: Constants.Text.placeholder,
             systemImageName: Constants.textfieldImageName
-        )
+        ) {
+            Task {
+                await presenter.loadInitialImages()
+                await presenter.addNewSearchToHistory()
+            }
+        }
     }
 }
 
