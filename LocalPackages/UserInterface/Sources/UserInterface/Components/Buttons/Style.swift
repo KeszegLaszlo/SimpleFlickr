@@ -31,7 +31,7 @@ public extension FancyButton {
 
 public struct FancyButton: View {
     public let style: Style
-    public var onTap: @Sendable () -> Void
+    public var onTap: @Sendable @MainActor () -> Void
     public var size: CGFloat
 
     private enum Constants {
@@ -62,7 +62,7 @@ public struct FancyButton: View {
      public init(
         style: Style = .xmark,
         size: CGFloat = 22,
-        onTap: @escaping @Sendable () -> Void
+        onTap: @escaping @Sendable @MainActor () -> Void
     ) {
         self.style = style
         self.size = size

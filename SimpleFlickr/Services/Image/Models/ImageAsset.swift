@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Utilities
 
 struct ImageAsset: Hashable, Codable, Identifiable {
     struct Size: Hashable, Codable {
@@ -45,4 +46,13 @@ struct ImageAsset: Hashable, Codable, Identifiable {
         self.size = size
         self.source = source
     }
+
+    static let mock = ImageAsset(
+        id: "mock-asset-1",
+        title: "Mock Image",
+        thumbnail: Utilities.sampleImageURL,
+        original: Utilities.sampleImageURL,
+        size: Size(width: 800, height: 600),
+        source: .mock
+    )
 }

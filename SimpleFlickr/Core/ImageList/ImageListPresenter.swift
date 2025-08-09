@@ -30,6 +30,10 @@ class ImageListPresenter {
         self.router = router
     }
 
+    func onSelectImage(_ image: ImageAsset) {
+        router.showImageDetails(delegate: .init(image: image))
+    }
+
     func loadInitialImages() async {
         viewState = .loading
         do {

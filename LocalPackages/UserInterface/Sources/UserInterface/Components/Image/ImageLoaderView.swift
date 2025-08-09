@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+import Utilities
 
 public struct ImageLoaderView: View {
     private enum Constants {
@@ -46,7 +47,7 @@ public struct ImageLoaderView: View {
 }
 
 #Preview {
-    ImageLoaderView(url: URL(string: "https://picsum.photos/600/600")!)
+    ImageLoaderView(url: Utilities.sampleImageURL)
         .frame(width: 100, height: 200)
         .anyButton(.highlight) { }
 }

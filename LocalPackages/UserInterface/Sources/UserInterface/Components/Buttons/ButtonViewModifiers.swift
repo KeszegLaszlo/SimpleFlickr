@@ -27,14 +27,17 @@ struct PressableButtonStyle: ButtonStyle {
     }
 }
 
-enum ButtonStyleOption {
+public enum ButtonStyleOption {
     case press, highlight, plain
 }
 
-extension View {
+public extension View {
 
     @ViewBuilder
-    func anyButton(_ option: ButtonStyleOption = .plain, action: @escaping () -> Void) -> some View {
+    func anyButton(
+        _ option: ButtonStyleOption = .plain,
+        action: @escaping () -> Void
+    ) -> some View {
         switch option {
         case .press:
             self.pressableButton(action: action)

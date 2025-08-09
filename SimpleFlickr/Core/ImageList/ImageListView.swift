@@ -63,6 +63,9 @@ struct ImageListView: View {
                             .onAppear {
                                 presenter.loadMoreData(image: image)
                             }
+                            .anyButton(.press) {
+                                presenter.onSelectImage(image)
+                            }
                     }
                 }
                 .animation(.bouncy, value: presenter.layyoutId)

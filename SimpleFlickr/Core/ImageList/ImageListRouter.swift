@@ -6,5 +6,7 @@
 //
 
 @MainActor
-protocol ImageListRouter { }
+protocol ImageListRouter {
+    func showImageDetails(delegate: DetailsViewDelegate)
+}
 extension CoreRouter: ImageListRouter { }

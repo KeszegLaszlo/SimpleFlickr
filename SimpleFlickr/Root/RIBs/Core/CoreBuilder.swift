@@ -28,4 +28,30 @@ struct CoreBuilder: Builder {
             )
         )
     }
+
+    func imageDetails(
+        router: AnyRouter,
+        delegate: DetailsViewDelegate
+    ) -> some View {
+        ImageDetailsView(
+            delegate: delegate,
+            presenter: ImageDetailsPresenter(
+                interactor: interactor,
+                router: CoreRouter(router: router, builder: self)
+            )
+        )
+    }
+
+    func imagePreview(
+        router: AnyRouter,
+        delegate: MediaDelegate
+    ) -> some View {
+        MediaPreviewView(
+            delegate: delegate,
+            presenter: MediaPreviewPresenter(
+                interactor: interactor,
+                router: CoreRouter(router: router, builder: self)
+            )
+        )
+    }
 }
