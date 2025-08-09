@@ -11,4 +11,30 @@ extension View {
     public func any() -> AnyView {
         AnyView(self)
     }
+
+    @ViewBuilder
+    public func ifSatisfiedCondition(
+        _ condition: Bool,
+        transform: (Self) -> some View
+    ) -> some View {
+        if condition {
+            transform(self)
+        } else {
+            self
+        }
+    }
+
+    public func tappableBackground() -> some View {
+        background(Color.black.opacity(0.001))
+    }
+
+    func callToActionButton() -> some View {
+        self
+            .font(.headline)
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 55)
+            .background(.orange)
+            .cornerRadius(16)
+    }
 }
