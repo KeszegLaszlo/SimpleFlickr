@@ -21,7 +21,7 @@ enum FlickrImageEndpoint: EndpointProvider {
     var apiKeyQueryName: String? { "api_key" }
     var body: [String: Any]? { nil }
     var mockFile: String? { nil }
-
+    
     var path: String {
         switch self {
         case .search: "/services/rest"

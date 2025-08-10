@@ -137,7 +137,7 @@ private struct FlickrPhotosDTO: Decodable {
         } else if let stringTotal = try? container.decode(String.self, forKey: .total), let intValue = Int(stringTotal) {
             self.totalRaw = intValue
         } else {
-            self.totalRaw = 0
+            self.totalRaw = .zero
         }
 
         self.photo = try container.decode([FlickrPhotoDTO].self, forKey: .photo)

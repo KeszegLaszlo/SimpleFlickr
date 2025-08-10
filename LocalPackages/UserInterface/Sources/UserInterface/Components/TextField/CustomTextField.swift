@@ -43,7 +43,7 @@ public struct CustomTextField: View {
     private let submitLabel: SubmitLabel
 
     private var onSubmit: @Sendable () -> Void
-    @FocusState private var isFocused: Bool
+    private var bindingIsFocused: FocusState<Bool>.Binding
     @Binding var searchText: String
 
     @ViewBuilder
@@ -55,10 +55,10 @@ public struct CustomTextField: View {
 
     private var textFieldView: some View {
         TextField(placeholder, text: $searchText)
-            .focused($isFocused)
+            .focused(bindingIsFocused)
             .submitLabel(submitLabel)
             .onSubmit {
-                isFocused = false
+                bindingIsFocused.wrappedValue = false
                 onSubmit()
             }
     }
@@ -89,7 +89,7 @@ public struct CustomTextField: View {
 
     private var headerBackground: some View {
         RoundedRectangle(
-            cornerRadius: isFocused ? Constants.Layout.cornerRadiusFocused : Constants.Layout.cornerRadiusUnfocused
+            cornerRadius: bindingIsFocused.wrappedValue ? Constants.Layout.cornerRadiusFocused : Constants.Layout.cornerRadiusUnfocused
         )
         .fill(
             .ultraThinMaterial
@@ -110,7 +110,7 @@ public struct CustomTextField: View {
                     )
                 )
         )
-        .padding(.top, isFocused ? Constants.Layout.topPaddingFocused : Constants.Layout.topPaddingUnfocused)
+        .padding(.top, bindingIsFocused.wrappedValue ? Constants.Layout.topPaddingFocused : Constants.Layout.topPaddingUnfocused)
     }
 
     private var decoratedHeader: some View {
@@ -118,7 +118,7 @@ public struct CustomTextField: View {
             .background { headerBackground }
             .padding(
                 .horizontal,
-                isFocused ? Constants.Layout.horizontalPaddingFocused : Constants.Layout.horizontalPaddingUnfocused
+                bindingIsFocused.wrappedValue ? Constants.Layout.horizontalPaddingFocused : Constants.Layout.horizontalPaddingUnfocused
             )
             .padding(.bottom, Constants.Layout.bottomPadding)
             .padding(.top, Constants.Layout.topOuterPadding)
@@ -126,7 +126,7 @@ public struct CustomTextField: View {
 
     private var backgroundBlur: some View {
         ProgressiveBlurView()
-            .blur(radius: isFocused ? Constants.Layout.blurRadiusFocused : Constants.Layout.blurRadiusUnfocused)
+            .blur(radius: bindingIsFocused.wrappedValue ? Constants.Layout.blurRadiusFocused : Constants.Layout.blurRadiusUnfocused)
             .padding(.horizontal, Constants.Layout.backgroundHorizontalPadding)
             .padding(.bottom, Constants.Layout.backgroundBottomPadding)
             .padding(.top, Constants.Layout.backgroundTopPadding)
@@ -144,7 +144,7 @@ public struct CustomTextField: View {
                 dampingFraction: Constants.Animation.dampingFraction,
                 blendDuration: Constants.Animation.blendDuration
             ),
-            value: isFocused
+            value: bindingIsFocused.wrappedValue
         )
     }
 
@@ -154,12 +154,14 @@ public struct CustomTextField: View {
 
     public init(
         searchText: Binding<String>,
+        isFocused: FocusState<Bool>.Binding,
         placeholder: LocalizedStringKey,
         systemImageName: String?,
         submitLabel: SubmitLabel = .search,
         onSubmit: @escaping @Sendable () -> Void
     ) {
         _searchText = searchText
+        self.bindingIsFocused = isFocused
         self.systemImageName = systemImageName
         self.placeholder = placeholder
         self.submitLabel = submitLabel
@@ -169,9 +171,11 @@ public struct CustomTextField: View {
 
 #Preview {
     @Previewable @State var searchText = ""
+    @FocusState var previewIsFocused: Bool
 
     CustomTextField(
         searchText: $searchText,
+        isFocused: $previewIsFocused,
         placeholder: "Select photos",
         systemImageName: "magnifyingglass"
     ) {}

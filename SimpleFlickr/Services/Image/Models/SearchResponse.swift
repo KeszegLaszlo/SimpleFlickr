@@ -9,4 +9,3 @@ struct SearchResponse<Item: Codable>: Codable {
     let items: [Item]
     let page: Page
 }
-
