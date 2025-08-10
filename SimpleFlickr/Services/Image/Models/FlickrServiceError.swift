@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// Represents possible error cases returned by the Flickr API.
+/// - SeeAlso: [Flickr API - flickr.photos.search](https://www.flickr.com/services/api/flickr.photos.search.html)
 enum FlickrServiceError: Error {
     case tooManyTags
     case unknownUser

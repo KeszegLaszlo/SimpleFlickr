@@ -9,40 +9,17 @@ import Foundation
 
 @MainActor
 protocol ImageListInteractor {
-    func loadMoreImages(
+    func loadImages(
         query: String,
         isPaginating: Bool,
         forceRefresh: Bool
     ) async throws -> [ImageAsset]
 
-    func getInitialMessages(
-            query: String,
-            isPaginating: Bool,
-            forceRefresh: Bool
-        ) async throws -> [ImageAsset]
-
     func addRecentSearch(seach: SearchElementModel) throws
     func getSearchHistory() throws -> [SearchElementModel]
     func getMostRecentSearch() throws -> SearchElementModel?
-}
-
-extension ImageListInteractor {
-    func loadMoreImages(
-        query: String,
-        isPaginating: Bool = true,
-        forceRefresh: Bool = false
-    ) async throws -> [ImageAsset] {
-        try await loadMoreImages(query: query, isPaginating: isPaginating, forceRefresh: forceRefresh)
-    }
-
-    func getInitialMessages(
-            query: String,
-            isPaginating: Bool = false,
-            forceRefresh: Bool = false
-    ) async throws -> [ImageAsset] {
-        try await getInitialMessages(query: query, isPaginating: isPaginating, forceRefresh: forceRefresh)
-
-    }
+    func trackScreenEvent(event: LoggableEvent)
+    func trackEvent(event: LoggableEvent)
 }
 
 extension CoreInteractor: ImageListInteractor { }

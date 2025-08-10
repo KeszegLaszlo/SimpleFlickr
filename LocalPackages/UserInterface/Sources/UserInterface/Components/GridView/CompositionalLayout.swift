@@ -44,7 +44,11 @@ public struct CompositionalLayout<Content: View>: View {
         }
     }
 
-    public init(count: Int = 3, spacing: CGFloat = 6, @ViewBuilder content: () -> Content) {
+    public init(
+        count: Int = 3,
+        spacing: CGFloat = 6,
+        @ViewBuilder content: () -> Content
+    ) {
         self.count = count
         self.spacing = spacing
         self.content = content()
@@ -152,7 +156,7 @@ fileprivate extension SubviewsCollection {
             .pickerStyle(.segmented)
 
             CompositionalLayout(count: count) {
-                ForEach(0...20, id: \.self) { item in
+                ForEach(0...20, id: \.self) { _ in
                     RoundedRectangle(cornerRadius: 10)
                         .fill(.black.opacity(0.9).gradient)
                 }

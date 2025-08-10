@@ -5,7 +5,8 @@
 //  Created by Keszeg László on 2025. 08. 09..
 //
 
-protocol ImageSearchService {
+@MainActor
+protocol ImageSearchService: Sendable {
     var apiClient: ApiProtocol { get }
 
     func searchImages(
@@ -14,4 +15,3 @@ protocol ImageSearchService {
         perPage: Int
     ) async throws -> SearchResponse<ImageAsset>
 }
-

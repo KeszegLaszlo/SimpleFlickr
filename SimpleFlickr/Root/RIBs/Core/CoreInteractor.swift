@@ -12,6 +12,7 @@ import Logger
 struct CoreInteractor: GlobalInteractor {
     private let logManager: LogManager
     private let imageSearchManager: ImageSearchManager
+
     init(container: DependencyContainer) {
         logManager = container.resolve(LogManager.self)!
         let imageSearchService = container.resolve(ImageSearchService.self)!
@@ -23,7 +24,7 @@ struct CoreInteractor: GlobalInteractor {
         )
     }
 
-    func getInitialMessages(
+    func loadImages(
         query: String,
         isPaginating: Bool,
         forceRefresh: Bool = false
@@ -31,23 +32,11 @@ struct CoreInteractor: GlobalInteractor {
         try await imageSearchManager.searchImages(
             query: query,
             isPaginating: isPaginating,
-            forceRefresh: false
+            forceRefresh: forceRefresh
         )
     }
 
-    func loadMoreImages(
-        query: String,
-        isPaginating: Bool,
-        forceRefresh: Bool = false
-    ) async throws -> [ImageAsset] {
-        try await imageSearchManager.searchImages(
-            query: query,
-            isPaginating: isPaginating,
-            forceRefresh: true
-        )
-    }
-
-    //MARK: LocalPersistence
+    // MARK: LocalPersistence
     func addRecentSearch(seach: SearchElementModel) throws {
         try imageSearchManager.addRecentSearch(seach: seach)
     }
@@ -61,7 +50,7 @@ struct CoreInteractor: GlobalInteractor {
     }
 
     // MARK: Logger
-    func trackEvent(eventName: String, parameters: [String : Any]?, type: LogType) {
+    func trackEvent(eventName: String, parameters: [String: Any]?, type: LogType) {
         logManager.trackEvent(
             eventName: eventName,
             parameters: parameters,

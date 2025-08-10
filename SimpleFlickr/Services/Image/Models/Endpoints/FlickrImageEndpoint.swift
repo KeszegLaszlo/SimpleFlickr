@@ -11,7 +11,8 @@ import CustomNetworking
 enum FlickrImageEndpoint: EndpointProvider {
     case search(query: String, page: Int, perPage: Int)
 
-    static var injectedAPIKey: String?
+    //TODO: Handle api injection sendable
+    nonisolated(unsafe) static var injectedAPIKey: String?
 
     var scheme: String { "https" }
     var baseURL: String { "api.flickr.com" }

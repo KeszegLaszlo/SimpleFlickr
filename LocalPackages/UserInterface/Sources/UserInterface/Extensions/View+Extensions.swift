@@ -36,6 +36,14 @@ extension View {
         background(Color.black.opacity(0.001))
     }
 
+    public func onFirstAppear(action: @escaping () -> Void) -> some View {
+        modifier(OnFirstAppearViewModifier(action: action))
+    }
+
+    public func onFirstTask(action: @escaping () async -> Void) -> some View {
+        modifier(OnFirstTaskViewModifier(action: action))
+    }
+
     func callToActionButton() -> some View {
         self
             .font(.headline)

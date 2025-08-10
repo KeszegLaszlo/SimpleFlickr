@@ -39,8 +39,13 @@ class ImageSearchManager {
     private let service: any ImageSearchService
     private let localService: any LocalSearchHistoryPersistence
     private let logManager: LogManager
+    private struct CacheEntry {
+        var items: [ImageAsset]
+        var nextPage: Int = 1
+        var hasNext: Bool = true
+    }
 
-    private var imageCache: [String: (items: [ImageAsset], nextPage: Int)] = [:]
+    private var imageCache: [String: CacheEntry] = [:]
 
     /// Creates a new manager.
     ///
@@ -109,34 +114,71 @@ class ImageSearchManager {
         forceRefresh: Bool = false
     ) async throws -> [ImageAsset] {
         if !isPaginating,
-           let cached = imageCache[query],
-           !forceRefresh {
+           !forceRefresh,
+           let cached = imageCache[query] {
             logManager.trackEvent(event: Event.returnCached(query: query))
             return cached.items
         }
 
-        let nextPage = imageCache[query]?.nextPage ?? 1
-        logManager.trackEvent(event: Event.start(query: query, page: nextPage))
+        if forceRefresh {
+            invalidateCache(for: query)
+        }
+
+        print("QUERY:\(imageCache[query]?.nextPage) query: \(query)")
+        guard imageCache[query]?.hasNext ?? true else {
+            print("NA: vissa az üres:")
+            return []
+        }
+
+        let actualPage = imageCache[query]?.nextPage ?? 1
+        logManager.trackEvent(event: Event.start(query: query, page: actualPage))
 
         do {
-            let response = try await service.searchImages(query: query, page: nextPage, perPage: ImageConstants.perPage)
+            print("NA: Elsőlekérés page: \(actualPage)")
+            let response = try await service.searchImages(
+                query: query,
+                page: actualPage,
+                perPage: ImageConstants.perPage
+            )
+
             let newItems = response.items
-            var updatedItems = imageCache[query]?.items ?? []
-            updatedItems.append(contentsOf: newItems)
 
-            let hasFullPage = newItems.count == ImageConstants.perPage
-            let hasNextPage = response.page.hasNext
+            await updateCache(for: query, with: response, actualPage: actualPage)
+            print("QUERY: - UPDATED:\(imageCache[query]?.nextPage) query: \(query), actualpage: \(actualPage)")
 
-            let updatedNextPage = (hasFullPage && hasNextPage) ? nextPage + 1 : nextPage
-
-            imageCache[query] = (items: updatedItems, nextPage: updatedNextPage)
-
-            logManager.trackEvent(event: Event.success(query: query, page: nextPage))
+            logManager.trackEvent(event: Event.success(query: query, page: actualPage))
             return newItems
         } catch {
-            logManager.trackEvent(event: Event.fail(query: query, page: nextPage))
+            logManager.trackEvent(event: Event.fail(query: query, page: actualPage))
             throw error
         }
+    }
+
+    @MainActor
+    private func updateCache(
+        for query: String,
+        with response: SearchResponse<ImageAsset>,
+        actualPage: Int
+    ) async {
+        let hasNextPage = response.page.hasNext
+        let updatedNextPage = hasNextPage ? actualPage + 1 : actualPage
+
+        if var entry = imageCache[query] {
+            entry.items += response.items
+            entry.nextPage = updatedNextPage
+            entry.hasNext  = hasNextPage
+            imageCache[query] = entry
+        } else {
+            imageCache[query] = CacheEntry(
+                items: response.items,
+                nextPage: updatedNextPage,
+                hasNext: hasNextPage
+            )
+        }
+    }
+
+    private func invalidateCache(for query: String) {
+        imageCache.removeValue(forKey: query)
     }
 }
 

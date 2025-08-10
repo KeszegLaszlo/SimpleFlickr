@@ -17,4 +17,3 @@ public class MockApiService: Mockable, ApiProtocol {
         return loadJSON(filename: mockFile, type: T.self)
     }
 }
-

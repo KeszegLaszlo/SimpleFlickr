@@ -12,7 +12,16 @@ import UserInterface
 struct ImageListView: View {
     private enum Constants {
         enum Text {
-            static let placeholder: LocalizedStringKey = "Search images..."
+            @MainActor static let placeholder: LocalizedStringKey = "Search images..."
+        }
+
+        enum Size {
+            static let scrollItemSpacing: CGFloat = 6
+            static let horizontalChipPadding: CGFloat = 18
+            static let verticalChipPadding: CGFloat = 8
+            static let chipSpacing: CGFloat = 10
+            static let searchHistoryHorizontalPadding: CGFloat = 16
+            static let searchHistoryVerticalPadding: CGFloat = 4
         }
 
         static let textfieldImageName: String = "magnifyingglass"
@@ -24,6 +33,7 @@ struct ImageListView: View {
     }
 
     @State var presenter: ImageListPresenter
+    @FocusState var isTextFieldIsFocused: Bool
 
     var body: some View {
         VStack(spacing: .zero) {
@@ -31,7 +41,7 @@ struct ImageListView: View {
             case let .empty(reason):
                 noResultsView(reason)
             case .loading:
-                ProgressView().tint(.accent)
+                ProgressView().tint(.white)
             case .loaded:
                 loadedView
             }
@@ -40,38 +50,17 @@ struct ImageListView: View {
             if presenter.viewState != .loading {
                 VStack(spacing: .zero) {
                     searchField
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 10) {
-                            ForEach(presenter.searchResults) { search in
-                                Text(search.title)
-                                    .font(.callout.bold())
-                                    .padding(.horizontal, 18)
-                                    .padding(.vertical, 8)
-                                    .background(
-                                        LinearGradient(
-                                            colors: [Color.accentColor.opacity(0.88), Color.accentColor.opacity(0.52)],
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        )
-                                    )
-                                    .foregroundStyle(.white)
-                                    .clipShape(Capsule())
-                                    .shadow(color: Color.accentColor.opacity(0.25), radius: 4, x: 0, y: 2)
-                                    .overlay(
-                                        Capsule().stroke(Color.white.opacity(0.25), lineWidth: 1)
-                                    )
-                                    .animation(.smooth, value: search.title)
-                            }
-                        }
-                        .padding(.horizontal)
-                        .padding(.vertical, 4)
-                    }
+                    searchHistory
                 }
             }
         }
         .withMeshGradientBackground
         .animation(.bouncy, value: presenter.isLoadingMore)
-        .task { await presenter.loadInitialImages() }
+        .onChange(of: isTextFieldIsFocused) { _, focused in
+            Task { await presenter.onFocusChanged(focused) }
+        }
+        .onFirstTask { await presenter.loadImages() }
+        .onFirstAppear { presenter.onAppear() }
     }
 
     @ViewBuilder
@@ -86,12 +75,17 @@ struct ImageListView: View {
 
     private var loadedView: some View {
         ScrollView(.vertical) {
-            LazyVStack(spacing: 6) {
+            LazyVStack(spacing: Constants.Size.scrollItemSpacing) {
                 CompositionalLayout(count: presenter.layyoutId) {
                     ForEach(presenter.images) { image in
                         ImageLoaderView(url: image.thumbnail)
-                            .clipShape(RoundedRectangle(cornerRadius: 15))
-                            .shadow(color: Color.black.opacity(0.18), radius: 10, x: 0, y: 6)
+                            .clipShape(RoundedRectangle(cornerRadius: GlobalConstants.Size.cornerRadius))
+                            .shadow(
+                                color: GlobalConstants.Shadow.color,
+                                radius: GlobalConstants.Shadow.radius,
+                                x: GlobalConstants.Shadow.shadowX,
+                                y: GlobalConstants.Shadow.shadowY
+                            )
                             .withCustomScrollTransition
                             .onAppear {
                                 presenter.loadMoreData(image: image)
@@ -107,25 +101,73 @@ struct ImageListView: View {
                         .tint(.accent)
                 }
             }
-            .padding(15)
+            .animation(.bouncy, value: presenter.images)
+            .padding(GlobalConstants.Size.bodyPadding)
+        }
+        .animation(.bouncy, value: presenter.images)
+        .refreshable {
+            Task {
+                await presenter.loadImages()
+            }
         }
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.immediately)
         .scrollTargetLayout()
         .onTapGesture {
-            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            presenter.dismissKeyboard()
         }
     }
 
     private var searchField: some View {
         CustomTextField(
             searchText: $presenter.searchText,
+            isFocused: $isTextFieldIsFocused,
             placeholder: Constants.Text.placeholder,
             systemImageName: Constants.textfieldImageName
         ) {
-            Task {
-                await presenter.loadInitialImages()
-                await presenter.addNewSearchToHistory()
+            Task { await presenter.submitSearch() }
+        }
+    }
+
+    @ViewBuilder
+    private var searchHistory: some View {
+        if isTextFieldIsFocused {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: Constants.Size.chipSpacing) {
+                    ForEach(presenter.searchResults) { search in
+                        Text(search.title)
+                            .font(.callout.bold())
+                            .padding(.horizontal, Constants.Size.horizontalChipPadding)
+                            .padding(.vertical, Constants.Size.verticalChipPadding)
+                            .background(
+                                LinearGradient(
+                                    colors: [Color.accentColor.opacity(0.88), Color.accentColor.opacity(0.52)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .withCustomScrollTransition
+                            .foregroundStyle(.white)
+                            .clipShape(Capsule())
+                            .shadow(
+                                color: GlobalConstants.Shadow.color,
+                                radius: GlobalConstants.Shadow.radius,
+                                x: GlobalConstants.Shadow.shadowX,
+                                y: GlobalConstants.Shadow.shadowY
+                            )
+                            .overlay(
+                                Capsule().stroke(Color.white.opacity(0.25), lineWidth: 1)
+                            )
+                            .animation(.smooth, value: search.title)
+                            .anyButton(.press) {
+                                Task {
+                                    await presenter.historySearchDidTap(chip: search)
+                                }
+                            }
+                    }
+                }
+                .padding(.horizontal,  Constants.Size.searchHistoryHorizontalPadding)
+                .padding(.vertical, Constants.Size.searchHistoryVerticalPadding)
             }
         }
     }

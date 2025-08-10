@@ -24,6 +24,10 @@ struct SwiftDataLocalSearchHistoryPersistence: LocalSearchHistoryPersistence {
     func addRecentSearch(seach: SearchElementModel) throws {
         let entity = SearchElementEntity(from: seach)
         mainContext.insert(entity)
+        /// Persists the recent search to the local SwiftData store.
+        /// - Parameter seach: The search model to be stored.
+        /// - Throws: An error if saving to the SwiftData context fails.
+        /// - SeeAlso: [Flickr API - flickr.photos.search](https://www.flickr.com/services/api/flickr.photos.search.html)
         try mainContext.save()
     }
 

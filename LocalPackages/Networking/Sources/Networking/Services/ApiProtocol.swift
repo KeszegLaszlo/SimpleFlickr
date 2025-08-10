@@ -8,6 +8,6 @@
 import Foundation
 
 @MainActor
-public protocol ApiProtocol {
+public protocol ApiProtocol: Sendable {
     func asyncRequest<T: Decodable>(endpoint: any EndpointProvider) async throws -> T
 }
