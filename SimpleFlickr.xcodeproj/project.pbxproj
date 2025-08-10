@@ -37,7 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		DA206C5E2E473FF3002D458B /* SimpleFlickr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleFlickr.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA206C5E2E473FF3002D458B /* SimpleFlickr Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SimpleFlickr Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA206C6B2E473FF5002D458B /* SimpleFlickrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleFlickrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA206C752E473FF5002D458B /* SimpleFlickrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleFlickrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -141,7 +141,7 @@
 		DA206C5F2E473FF3002D458B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DA206C5E2E473FF3002D458B /* SimpleFlickr.app */,
+				DA206C5E2E473FF3002D458B /* SimpleFlickr Dev.app */,
 				DA206C6B2E473FF5002D458B /* SimpleFlickrTests.xctest */,
 				DA206C752E473FF5002D458B /* SimpleFlickrUITests.xctest */,
 			);
@@ -182,7 +182,7 @@
 				DA19B7012E47BAE600887078 /* CustomNetworking */,
 			);
 			productName = SimpleFlickr;
-			productReference = DA206C5E2E473FF3002D458B /* SimpleFlickr.app */;
+			productReference = DA206C5E2E473FF3002D458B /* SimpleFlickr Dev.app */;
 			productType = "com.apple.product-type.application";
 		};
 		DA206C6A2E473FF5002D458B /* SimpleFlickrTests */ = {
@@ -694,7 +694,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.keszeg.SimpleFlickr.dev;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "SimpleFlickr Dev";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
