@@ -16,14 +16,12 @@ let package = Package(
     products: [
         .library(name: "Router", targets: ["Router"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/realm/SwiftLint", exact: "0.57.1")
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "Router",
             swiftSettings: swiftSettings,
-            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+            plugins: []
         ),
         .testTarget(
             name: "RouterTests",

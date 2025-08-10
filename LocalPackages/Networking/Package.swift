@@ -17,7 +17,6 @@ let package = Package(
         .library(name: "CustomNetworking", targets: ["CustomNetworking"])
     ],
     dependencies: [
-        .package(url: "https://github.com/realm/SwiftLint", exact: "0.57.1"),
         .package(name: "Logger", path: "../Logger")
     ],
     targets: [
@@ -27,7 +26,7 @@ let package = Package(
                 .product(name: "Logger", package: "Logger")
             ],
             swiftSettings: swiftSettings,
-            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+            plugins: []
         ),
         .testTarget(
             name: "CustomNetworkingTests",

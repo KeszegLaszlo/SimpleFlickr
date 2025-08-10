@@ -19,14 +19,13 @@ let package = Package(
         .library(name: "LoggerFirebaseCrashlytics", targets: ["LoggerFirebaseCrashlytics"])
     ],
     dependencies: [
-        .package(url: "https://github.com/realm/SwiftLint", exact: "0.57.1"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "11.0.0")
     ],
     targets: [
         .target(
             name: "Logger",
             swiftSettings: swiftSettings,
-            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+            plugins: []
         ),
 
         .target(
@@ -36,7 +35,7 @@ let package = Package(
                 .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk")
             ],
             swiftSettings: swiftSettings,
-            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+            plugins: []
         ),
 
         .target(
@@ -46,7 +45,7 @@ let package = Package(
                 .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk")
             ],
             swiftSettings: swiftSettings,
-            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+            plugins: []
         ),
 
         .testTarget(
