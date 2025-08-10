@@ -5,12 +5,12 @@
 //  Created by Keszeg László on 2025. 08. 09..
 //
 
+import CustomNetworking
 import SwiftUI
 import Logger
 import LoggerFirebaseAnalytics
 import LoggerFirebaseCrashlytics
 import Router
-import CustomNetworking
 import Utilities
 
 typealias AnyRouter = Router.RouterProtocol
