@@ -11,6 +11,7 @@ import LoggerFirebaseAnalytics
 import LoggerFirebaseCrashlytics
 import Router
 import CustomNetworking
+import Utilities
 
 typealias AnyRouter = Router.RouterProtocol
 typealias RouterView = Router.RouterView
@@ -25,13 +26,67 @@ typealias ApiProtocol = CustomNetworking.ApiProtocol
 typealias EndpointProvider = CustomNetworking.EndpointProvider
 typealias RequestMethod = CustomNetworking.RequestMethod
 
+enum DependencyError: Error {
+    case missingAPIKey
+    var errorDescription: String? {
+        switch self {
+        case .missingAPIKey:
+            return "API key for Flickr is missing. Please provide a valid API key in the bundle."
+        }
+    }
+}
+
 @MainActor
 struct Dependencies {
     let container: DependencyContainer
     let logManager: LogManager
 
+    /// Initializes the application dependencies for the given build configuration.
+    ///
+    /// This initializer wires up all major application services based on the
+    /// current build environment:
+    ///
+    /// - Creates and configures the `LogManager` with the appropriate logging services
+    ///   (e.g., console logging, analytics, crash reporting).
+    /// - Selects an API client implementation (`ApiProtocol`) according to the configuration.
+    /// - Creates the `ImageSearchService` using either mock or live implementations.
+    /// - Creates the `LocalSearchHistoryPersistence` service to handle recent search storage.
+    /// - Registers all created services into the shared `DependencyContainer`.
+    ///
+    /// ## Build Configurations
+    /// - **`.mock`**:
+    ///   - Logging: Console only.
+    ///   - API client: Mock.
+    ///   - Image search: Mock.
+    ///   - Search history: Mock in-memory store.
+    /// - **`.dev`**:
+    ///   - Logging: Console (verbose), Firebase Analytics, Crashlytics.
+    ///   - API client: Live.
+    ///   - API key: Loaded from the app bundle’s Info.plist.
+    ///   - Image search: Flickr API.
+    ///   - Search history: SwiftData.
+    /// - **`.prod`**:
+    ///   - Logging: Firebase Analytics, Crashlytics.
+    ///   - API client: Live.
+    ///   - API key: Loaded from the app bundle’s Info.plist.
+    ///   - Image search: Flickr API.
+    ///   - Search history: SwiftData.
+    ///
+    /// ## API Key Storage
+    /// The Flickr API key is currently stored in the app’s `Info.plist` as
+    /// a `Data` field (Base64-encoded bytes) for **simple obfuscation**.
+    /// While this hides the key from plain-text inspection, it can still
+    /// be recovered from the app bundle and should not be considered secure.
+    /// A more secure approach would be to:
+    /// - Proxy requests through your own backend and store the API key server-side.
+    /// - Use runtime retrieval from a secure remote configuration service.
+    /// - Apply stronger runtime obfuscation with integrity checks.
+    ///
+    /// - Parameter config: The build configuration determining which services to initialize.
+    /// - Throws: `DependencyError.missingAPIKey` if a live configuration is used but
+    ///           the API key could not be loaded from the bundle.
     // swiftlint:disable:next function_body_length
-    init(config: BuildConfiguration) {
+    init(config: BuildConfiguration) throws {
         let imageSearchService: any ImageSearchService
         let localSearchHistoryService: any LocalSearchHistoryPersistence
         let apiService: any ApiProtocol
@@ -52,8 +107,11 @@ struct Dependencies {
                 FirebaseCrashlyticsService()
             ])
             apiService = ApiService()
+            guard let key = Bundle.main.apiKey(for: Constants.apiKeyName) else {
+                throw DependencyError.missingAPIKey
+            }
             imageSearchService = FlickrSearchService(
-                apiKey: "65803e8f6e4a3982200621cad356be51", //TODO: Remove from here
+                apiKey: key,
                 apiClient: apiService
             )
             localSearchHistoryService = SwiftDataLocalSearchHistoryPersistence()
@@ -64,8 +122,11 @@ struct Dependencies {
                 FirebaseCrashlyticsService()
             ])
             apiService = ApiService()
+            guard let key = Bundle.main.apiKey(for: Constants.apiKeyName) else {
+                throw DependencyError.missingAPIKey
+            }
             imageSearchService = FlickrSearchService(
-                apiKey: "65803e8f6e4a3982200621cad356be51", //TODO: Remove from here
+                apiKey: key,
                 apiClient: apiService
             )
             localSearchHistoryService = SwiftDataLocalSearchHistoryPersistence()
@@ -111,4 +172,3 @@ class DevPreview {
         return container
     }
 }
-

@@ -33,7 +33,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
         
         config.configure()
-        dependencies = Dependencies(config: config)
+        //TODO: Handle initialization error
+        dependencies = try? Dependencies(config: config)
         builder = RootBuilder(
             interactor: RootInteractor(container: dependencies.container),
             loggedInRIB: {
@@ -54,12 +55,12 @@ enum BuildConfiguration {
             break //TODO: remove
         case .dev:
             break //TODO: remove
-            let plist = Bundle.main.path(forResource: "GoogleService-Info-Dev", ofType: "plist")!
+            let plist = Bundle.main.path(forResource: Constants.devGoogleSerrvicePlist, ofType: Constants.plistType)!
             let options = FirebaseOptions(contentsOfFile: plist)!
             FirebaseApp.configure(options: options)
         case .prod:
             break
-            let plist = Bundle.main.path(forResource: "GoogleService-Info-Prod", ofType: "plist")!
+            let plist = Bundle.main.path(forResource: Constants.prodGoogleSerrvicePlist, ofType: Constants.plistType)!
             let options = FirebaseOptions(contentsOfFile: plist)!
             FirebaseApp.configure(options: options)
         }

@@ -19,3 +19,13 @@ public struct Utilities {
     public static let sampleImageURL = URL(string: "https://picsum.photos/600/600")!
 
 }
+
+public extension Bundle {
+    func apiKey(for infoDictionaryKey: String) -> String? {
+        guard let data = object(forInfoDictionaryKey: infoDictionaryKey) as? Data else {
+            return nil
+        }
+        // Convert bytes back to lowercase hex string
+        return data.map { String(format: "%02x", $0) }.joined()
+    }
+}

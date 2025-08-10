@@ -54,6 +54,13 @@
 			);
 			target = DA206C5D2E473FF3002D458B /* SimpleFlickr */;
 		};
+		DA105E462E48854800FFF6BE /* Exceptions for "SimpleFlickr" folder in "SimpleFlickr" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = DA206C5D2E473FF3002D458B /* SimpleFlickr */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -67,6 +74,9 @@
 		};
 		DA206C602E473FF3002D458B /* SimpleFlickr */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				DA105E462E48854800FFF6BE /* Exceptions for "SimpleFlickr" folder in "SimpleFlickr" target */,
+			);
 			path = SimpleFlickr;
 			sourceTree = "<group>";
 		};
@@ -438,7 +448,8 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "SimpleFlickr - Mock";
+				INFOPLIST_FILE = SimpleFlickr/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "SimpleFlickr - Dev";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -662,6 +673,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SimpleFlickr/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "SimpleFlickr - Dev";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -712,7 +724,8 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = SimpleFlickr;
+				INFOPLIST_FILE = SimpleFlickr/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "SimpleFlickr - Dev";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
