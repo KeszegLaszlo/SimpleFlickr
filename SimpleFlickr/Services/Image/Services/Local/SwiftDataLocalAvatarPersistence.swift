@@ -21,22 +21,43 @@ struct SwiftDataLocalSearchHistoryPersistence: LocalSearchHistoryPersistence {
         self.container = try! ModelContainer(for: SearchElementEntity.self)
     }
 
-    func addRecentSearch(seach: SearchElementModel) throws {
-        let entity = SearchElementEntity(from: seach)
+    func addRecentSearch(search: SearchElementModel) throws {
+        let entity = SearchElementEntity(from: search)
         mainContext.insert(entity)
         /// Persists the recent search to the local SwiftData store.
-        /// - Parameter seach: The search model to be stored.
+        /// - Parameter search: The search model to be stored.
         /// - Throws: An error if saving to the SwiftData context fails.
         /// - SeeAlso: [Flickr API - flickr.photos.search](https://www.flickr.com/services/api/flickr.photos.search.html)
         try mainContext.save()
     }
 
+    /// Retrieves the user's recent search history from persistent storage.
+    ///
+    /// The results are sorted by `dateCreated` in descending order (most recent first)
+    /// and filtered to ensure each `title` appears only once (first occurrence kept).
+    ///
+    /// - Returns: An array of unique `SearchElementModel` items ordered from most recent to oldest.
+    /// - Throws: Rethrows any Core Data fetch errors from `mainContext`.
     func getSearchHistory() throws -> [SearchElementModel] {
-        let descriptor = FetchDescriptor<SearchElementEntity>(sortBy: [SortDescriptor(\.dateCreated, order: .reverse)])
+        let descriptor = FetchDescriptor<SearchElementEntity>(
+            sortBy: [SortDescriptor(\.dateCreated, order: .reverse)]
+        )
         let entities = try mainContext.fetch(descriptor)
-        return entities.map { $0.toModel() }
+
+        var seen = Set<String>()
+        return entities.compactMap { entity in
+            guard seen.insert(entity.title).inserted else { return nil }
+            return entity.toModel()
+        }
     }
-    
+
+    /// Retrieves the single most recent search entry from persistent storage.
+    ///
+    /// The search is determined by the highest `dateCreated` value.
+    /// If the stored entry has an empty `title`, it is ignored.
+    ///
+    /// - Returns: The most recent `SearchElementModel` if available and valid; otherwise `nil`.
+    /// - Throws: Rethrows any Core Data fetch errors from `mainContext`.
     func getMostRecentSearch() throws -> SearchElementModel? {
         var descriptor = FetchDescriptor<SearchElementEntity>(
             sortBy: [SortDescriptor(\.dateCreated, order: .reverse)]

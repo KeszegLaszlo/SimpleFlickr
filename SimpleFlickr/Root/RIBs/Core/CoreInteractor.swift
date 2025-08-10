@@ -37,8 +37,8 @@ struct CoreInteractor: GlobalInteractor {
     }
 
     // MARK: LocalPersistence
-    func addRecentSearch(seach: SearchElementModel) throws {
-        try imageSearchManager.addRecentSearch(seach: seach)
+    func addRecentSearch(search: SearchElementModel) throws {
+        try imageSearchManager.addRecentSearch(search: search)
     }
 
     func getSearchHistory() throws -> [SearchElementModel] {

@@ -74,9 +74,6 @@ public final class ApiService: ApiProtocol {
         } catch {
             throw ApiServiceError.transport(error)
         }
-        if let body = String(data: data, encoding: .utf8) {
-            print("📥 Response body:\n\(body)")
-        }
         try validate(response, data: data)
         return try decode(T.self, from: data)
     }

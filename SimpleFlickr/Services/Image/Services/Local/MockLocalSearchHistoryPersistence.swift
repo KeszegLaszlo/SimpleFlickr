@@ -13,7 +13,7 @@ struct MockLocalSearchHistoryPersistence: LocalSearchHistoryPersistence {
         self.history = history
     }
 
-    func addRecentSearch(seach: SearchElementModel) throws { }
+    func addRecentSearch(search: SearchElementModel) throws { }
 
     func getSearchHistory() throws -> [SearchElementModel] {
         history

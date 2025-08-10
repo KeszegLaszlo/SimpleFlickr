@@ -34,6 +34,7 @@ struct ImageListView: View {
 
     @State var presenter: ImageListPresenter
     @FocusState var isTextFieldIsFocused: Bool
+    @State private var shouldAnimateFocus: Bool = false
 
     var body: some View {
         VStack(spacing: .zero) {
@@ -41,22 +42,29 @@ struct ImageListView: View {
             case let .empty(reason):
                 noResultsView(reason)
             case .loading:
-                ProgressView().tint(.white)
+                ProgressView()
+                  .tint(.indigo)
+                  .controlSize(.large)
             case .loaded:
                 loadedView
             }
         }
+        .blur(radius: isTextFieldIsFocused ? 10 : .zero)
+        .animation(.bouncy, value: shouldAnimateFocus)
+        .overlay(alignment: .top, content: {
+            searchHistory
+        })
         .safeAreaInset(edge: .top, spacing: .zero) {
             if presenter.viewState != .loading {
-                VStack(spacing: .zero) {
-                    searchField
-                    searchHistory
-                }
+                searchField
             }
         }
         .withMeshGradientBackground
         .animation(.bouncy, value: presenter.isLoadingMore)
         .onChange(of: isTextFieldIsFocused) { _, focused in
+            withAnimation(.bouncy) {
+                shouldAnimateFocus = focused
+            }
             Task { await presenter.onFocusChanged(focused) }
         }
         .onFirstTask { await presenter.loadImages() }
@@ -77,6 +85,7 @@ struct ImageListView: View {
         ScrollView(.vertical) {
             LazyVStack(spacing: Constants.Size.scrollItemSpacing) {
                 gridView
+                    .allowsHitTesting(!isTextFieldIsFocused)
                 if presenter.isLoadingMore {
                     ProgressView()
                         .tint(.accent)
@@ -85,6 +94,7 @@ struct ImageListView: View {
             .animation(.bouncy, value: presenter.images)
             .padding(GlobalConstants.Size.bodyPadding)
         }
+        .scrollDisabled(isTextFieldIsFocused)
         .animation(.bouncy, value: presenter.images)
         .refreshable {
             Task {
@@ -94,8 +104,10 @@ struct ImageListView: View {
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.immediately)
         .scrollTargetLayout()
+        .contentShape(Rectangle())
         .onTapGesture {
             presenter.dismissKeyboard()
+            isTextFieldIsFocused = false
         }
     }
 
@@ -135,16 +147,22 @@ struct ImageListView: View {
 
     @ViewBuilder
     private var searchHistory: some View {
-        if isTextFieldIsFocused {
+        if shouldAnimateFocus {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Constants.Size.chipSpacing) {
                     ForEach(presenter.searchResults) { search in
                         chipView(for: search)
                     }
                 }
-                .padding(.horizontal,  Constants.Size.searchHistoryHorizontalPadding)
+                .padding(.horizontal, Constants.Size.searchHistoryHorizontalPadding)
                 .padding(.vertical, Constants.Size.searchHistoryVerticalPadding)
             }
+            .transition(
+                .asymmetric(
+                    insertion: .move(edge: .leading),
+                    removal: .move(edge: .trailing)
+                )
+            )
         }
     }
 
@@ -155,7 +173,7 @@ struct ImageListView: View {
             .padding(.vertical, Constants.Size.verticalChipPadding)
             .background(
                 LinearGradient(
-                    colors: [Color.accentColor.opacity(0.88), Color.accentColor.opacity(0.52)],
+                    colors: [Color.accent.opacity(0.88), Color.accent.opacity(0.52)],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -163,16 +181,9 @@ struct ImageListView: View {
             .withCustomScrollTransition
             .foregroundStyle(.white)
             .clipShape(Capsule())
-            .shadow(
-                color: GlobalConstants.Shadow.color,
-                radius: GlobalConstants.Shadow.radius,
-                x: GlobalConstants.Shadow.shadowX,
-                y: GlobalConstants.Shadow.shadowY
-            )
             .overlay(
                 Capsule().stroke(Color.white.opacity(0.25), lineWidth: 1)
             )
-            .animation(.smooth, value: search.title)
             .anyButton(.press) {
                 Task {
                     await presenter.historySearchDidTap(chip: search)

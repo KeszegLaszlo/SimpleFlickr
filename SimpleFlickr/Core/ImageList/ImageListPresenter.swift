@@ -42,7 +42,7 @@ class ImageListPresenter {
     /// The current high-level view state (loading, loaded, or empty) driving the UI.
     private(set) var viewState: ImageListView.ViewState = .loading
     /// The active grid/list layout identifier used by the view to switch layouts.
-    private(set) var layyoutId = Utilities.isLandscape ? 4 : 2
+    private(set) var layyoutId = Int.random(in: 2...4)
 
     private var lastCommittedSearchText = ""
 
@@ -176,7 +176,7 @@ class ImageListPresenter {
         do {
             interactor.trackEvent(event: Event.addRecentSearch(text: searchText))
             let searchModel: SearchElementModel = .init(title: searchText)
-            try interactor.addRecentSearch(seach: searchModel)
+            try interactor.addRecentSearch(search: searchModel)
             searchResults = try interactor.getSearchHistory()
         } catch {
             // Handle error silently
@@ -216,7 +216,7 @@ class ImageListPresenter {
     }
 
     /// Analytics and diagnostic events emitted by `ImageListPresenter`.
-    private enum Event: LoggableEvent {
+    enum Event: LoggableEvent {
         case viewAppeared
         case loadImagesStart(query: String)
         case loadImagesSuccess(count: Int, query: String)

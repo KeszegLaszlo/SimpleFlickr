@@ -15,7 +15,7 @@ protocol ImageListInteractor {
         forceRefresh: Bool
     ) async throws -> [ImageAsset]
 
-    func addRecentSearch(seach: SearchElementModel) throws
+    func addRecentSearch(search: SearchElementModel) throws
     func getSearchHistory() throws -> [SearchElementModel]
     func getMostRecentSearch() throws -> SearchElementModel?
     func trackScreenEvent(event: LoggableEvent)

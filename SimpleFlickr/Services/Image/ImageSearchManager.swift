@@ -67,8 +67,8 @@ class ImageSearchManager {
     ///
     /// - Parameter seach: The domain model representing a user search.
     /// - Throws: Rethrows persistence errors.
-    func addRecentSearch(seach: SearchElementModel) throws {
-        try localService.addRecentSearch(seach: seach)
+    func addRecentSearch(search: SearchElementModel) throws {
+        try localService.addRecentSearch(search: search)
     }
 
     /// Returns the stored search history **excluding** the most recent search.
@@ -124,9 +124,7 @@ class ImageSearchManager {
             invalidateCache(for: query)
         }
 
-        print("QUERY:\(imageCache[query]?.nextPage) query: \(query)")
         guard imageCache[query]?.hasNext ?? true else {
-            print("NA: vissa az üres:")
             return []
         }
 
@@ -134,7 +132,6 @@ class ImageSearchManager {
         logManager.trackEvent(event: Event.start(query: query, page: actualPage))
 
         do {
-            print("NA: Elsőlekérés page: \(actualPage)")
             let response = try await service.searchImages(
                 query: query,
                 page: actualPage,
@@ -144,7 +141,6 @@ class ImageSearchManager {
             let newItems = response.items
 
             await updateCache(for: query, with: response, actualPage: actualPage)
-            print("QUERY: - UPDATED:\(imageCache[query]?.nextPage) query: \(query), actualpage: \(actualPage)")
 
             logManager.trackEvent(event: Event.success(query: query, page: actualPage))
             return newItems
