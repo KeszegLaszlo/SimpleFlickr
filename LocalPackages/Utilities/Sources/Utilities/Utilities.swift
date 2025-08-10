@@ -7,6 +7,7 @@
 
 import UIKit
 
+@MainActor
 public struct Utilities {
     public static var isUnitTesting: Bool {
         NSClassFromString("XCTestCase") != nil
@@ -14,6 +15,16 @@ public struct Utilities {
 
     public static var isUITesting: Bool {
         ProcessInfo.processInfo.arguments.contains("UI_TESTING")
+    }
+
+    /// A Boolean value indicating whether the device is in portrait orientation.
+    public static var isPortrait: Bool {
+        UIDevice.current.orientation.isPortrait
+    }
+
+    /// A Boolean value indicating whether the device is in landscape orientation.
+    public static var isLandscape: Bool {
+        UIDevice.current.orientation.isLandscape
     }
 
     public static let sampleImageURL = URL(string: "https://picsum.photos/600/600")!

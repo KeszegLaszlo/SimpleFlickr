@@ -76,26 +76,7 @@ struct ImageListView: View {
     private var loadedView: some View {
         ScrollView(.vertical) {
             LazyVStack(spacing: Constants.Size.scrollItemSpacing) {
-                CompositionalLayout(count: presenter.layyoutId) {
-                    ForEach(presenter.images) { image in
-                        ImageLoaderView(url: image.thumbnail)
-                            .clipShape(RoundedRectangle(cornerRadius: GlobalConstants.Size.cornerRadius))
-                            .shadow(
-                                color: GlobalConstants.Shadow.color,
-                                radius: GlobalConstants.Shadow.radius,
-                                x: GlobalConstants.Shadow.shadowX,
-                                y: GlobalConstants.Shadow.shadowY
-                            )
-                            .withCustomScrollTransition
-                            .onAppear {
-                                presenter.loadMoreData(image: image)
-                            }
-                            .anyButton(.press) {
-                                presenter.onSelectImage(image)
-                            }
-                    }
-                }
-                .animation(.bouncy, value: presenter.layyoutId)
+                gridView
                 if presenter.isLoadingMore {
                     ProgressView()
                         .tint(.accent)
@@ -118,6 +99,29 @@ struct ImageListView: View {
         }
     }
 
+    private var gridView: some View {
+        CompositionalLayout(count: presenter.layyoutId) {
+            ForEach(presenter.images) { image in
+                ImageLoaderView(url: image.thumbnail)
+                    .clipShape(RoundedRectangle(cornerRadius: GlobalConstants.Size.cornerRadius))
+                    .shadow(
+                        color: GlobalConstants.Shadow.color,
+                        radius: GlobalConstants.Shadow.radius,
+                        x: GlobalConstants.Shadow.shadowX,
+                        y: GlobalConstants.Shadow.shadowY
+                    )
+                    .withCustomScrollTransition
+                    .onAppear {
+                        presenter.loadMoreData(image: image)
+                    }
+                    .anyButton(.press) {
+                        presenter.onSelectImage(image)
+                    }
+            }
+        }
+        .animation(.bouncy, value: presenter.layyoutId)
+    }
+
     private var searchField: some View {
         CustomTextField(
             searchText: $presenter.searchText,
@@ -135,41 +139,45 @@ struct ImageListView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: Constants.Size.chipSpacing) {
                     ForEach(presenter.searchResults) { search in
-                        Text(search.title)
-                            .font(.callout.bold())
-                            .padding(.horizontal, Constants.Size.horizontalChipPadding)
-                            .padding(.vertical, Constants.Size.verticalChipPadding)
-                            .background(
-                                LinearGradient(
-                                    colors: [Color.accentColor.opacity(0.88), Color.accentColor.opacity(0.52)],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .withCustomScrollTransition
-                            .foregroundStyle(.white)
-                            .clipShape(Capsule())
-                            .shadow(
-                                color: GlobalConstants.Shadow.color,
-                                radius: GlobalConstants.Shadow.radius,
-                                x: GlobalConstants.Shadow.shadowX,
-                                y: GlobalConstants.Shadow.shadowY
-                            )
-                            .overlay(
-                                Capsule().stroke(Color.white.opacity(0.25), lineWidth: 1)
-                            )
-                            .animation(.smooth, value: search.title)
-                            .anyButton(.press) {
-                                Task {
-                                    await presenter.historySearchDidTap(chip: search)
-                                }
-                            }
+                        chipView(for: search)
                     }
                 }
                 .padding(.horizontal,  Constants.Size.searchHistoryHorizontalPadding)
                 .padding(.vertical, Constants.Size.searchHistoryVerticalPadding)
             }
         }
+    }
+
+    private func chipView(for search: SearchElementModel) -> some View {
+        Text(search.title)
+            .font(.callout.bold())
+            .padding(.horizontal, Constants.Size.horizontalChipPadding)
+            .padding(.vertical, Constants.Size.verticalChipPadding)
+            .background(
+                LinearGradient(
+                    colors: [Color.accentColor.opacity(0.88), Color.accentColor.opacity(0.52)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .withCustomScrollTransition
+            .foregroundStyle(.white)
+            .clipShape(Capsule())
+            .shadow(
+                color: GlobalConstants.Shadow.color,
+                radius: GlobalConstants.Shadow.radius,
+                x: GlobalConstants.Shadow.shadowX,
+                y: GlobalConstants.Shadow.shadowY
+            )
+            .overlay(
+                Capsule().stroke(Color.white.opacity(0.25), lineWidth: 1)
+            )
+            .animation(.smooth, value: search.title)
+            .anyButton(.press) {
+                Task {
+                    await presenter.historySearchDidTap(chip: search)
+                }
+            }
     }
 }
 

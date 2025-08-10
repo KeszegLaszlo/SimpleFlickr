@@ -8,6 +8,7 @@
 import Observation
 import SwiftUI
 import Logger
+import Utilities
 
 /// # Overview
 /// `ImageListPresenter` manages the image list screen state, user interactions, and navigation.
@@ -41,7 +42,7 @@ class ImageListPresenter {
     /// The current high-level view state (loading, loaded, or empty) driving the UI.
     private(set) var viewState: ImageListView.ViewState = .loading
     /// The active grid/list layout identifier used by the view to switch layouts.
-    private(set) var layyoutId = 2
+    private(set) var layyoutId = Utilities.isLandscape ? 4 : 2
 
     private var lastCommittedSearchText = ""
 

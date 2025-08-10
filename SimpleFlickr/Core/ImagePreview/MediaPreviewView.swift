@@ -10,102 +10,66 @@ import UserInterface
 import Router
 import Utilities
 
+/// Represents the different types of media that can be displayed in the `MediaPreviewView`.
+/// - singleImage: A single image provided as a URL.
+/// - images: Multiple images provided as an array of URLs.
 enum MediaPreviewContent {
     case singleImage(URL)
     case images([URL])
+    // Handle extra media type if needed
 }
 
+/// A delegate that holds the media content for the `MediaPreviewView`.
 struct MediaDelegate {
     var mediaContent: MediaPreviewContent
 }
 
+/// A SwiftUI view responsible for previewing single or multiple media items.
+/// Supports background styling and a close button.
 struct MediaPreviewView: View {
+    /// Constants used within `MediaPreviewView`.
+    private enum Constants {
+        static let mediaButtonSize: CGFloat = 30
+    }
+
     let delegate: MediaDelegate
 
     @State var presenter: MediaPreviewPresenter
 
+    /// The main body of the `MediaPreviewView`.
+    /// Displays the media content with a gradient background and a close button overlay.
     var body: some View {
-        VStack {
-            switch delegate.mediaContent {
-            case let .singleImage(url):
-                imageView(url: url)
-            case let .images(urls):
-                ImagesView(urls: urls)
-            }
-        }
-        .background(.ultraThinMaterial)
-        .overlay(alignment: .topTrailing) {
-            FancyButton(style: .xmark, size: 30) {
-                Task { @MainActor in
-                    presenter.closeButtonDidTap()
+        content
+            .withMeshGradientBackground
+            .overlay(alignment: .topTrailing) {
+                FancyButton(style: .xmark, size: Constants.mediaButtonSize) {
+                    Task { @MainActor in
+                        presenter.closeButtonDidTap()
+                    }
                 }
+                .padding()
             }
+    }
+
+    /// A view builder that renders the media content based on its type.
+    @ViewBuilder
+    private var content: some View {
+        switch delegate.mediaContent {
+        case let .singleImage(url):
+            imageView(url: url)
+        case .images:
+            EmptyView()
+            // Handle multiple image carrousel if needed
         }
     }
 
+    /// Creates an image view for a given image URL.
+    /// - Parameter url: The URL of the image to be displayed.
+    /// - Returns: A SwiftUI view displaying the image.
     private func imageView(url: URL) -> some View {
         ImageLoaderView(url: url, resizingMode: .fit)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .centered()
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .ignoresSafeArea()
-    }
-
-    private struct ImagesView: View {
-        let urls: [URL]
-        @State var selectedIndex = 0
-        var body: some View {
-            VStack {
-                // Main large image
-                ImageLoaderView(url: urls[selectedIndex])
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: .infinity, maxHeight: 450)
-                    .clipShape(RoundedRectangle(cornerRadius: 30))
-                    .shadow(radius: 18)
-                    .padding(.vertical, 10)
-                    .animation(.easeInOut(duration: 0.25), value: selectedIndex)
-
-                // Thumbnail strip
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 14) {
-                        ForEach(urls.indices, id: \.self) { idx in
-                            ImageLoaderView(url: urls[idx])
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: selectedIndex == idx ? 74 : 54, height: selectedIndex == idx ? 74 : 54)
-                                .clipShape(RoundedRectangle(cornerRadius: 14))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 14)
-                                        .stroke(selectedIndex == idx ? Color.accentColor : Color.clear, lineWidth: 3)
-                                )
-                                .shadow(radius: selectedIndex == idx ? 8 : 0)
-                                .scaleEffect(selectedIndex == idx ? 1.15 : 1.0)
-                                .animation(.easeInOut(duration: 0.22), value: selectedIndex == idx)
-                                .onTapGesture {
-                                    selectedIndex = idx
-                                }
-                        }
-                    }
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 8)
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.ultraThinMaterial)
-            .ignoresSafeArea()
-        }
-    }
-}
-
-private extension View {
-    func centered() -> some View {
-        VStack {
-            Spacer()
-            HStack {
-                Spacer()
-                self
-                Spacer()
-            }
-            Spacer()
-        }
     }
 }
 
