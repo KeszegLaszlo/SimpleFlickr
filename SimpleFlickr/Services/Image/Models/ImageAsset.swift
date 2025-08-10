@@ -22,6 +22,14 @@ struct ImageAsset: Hashable, Codable, Identifiable {
         case flickr
         case mock
         case other(String)
+
+        var displayName: String {
+            switch self {
+            case .flickr: "Flickr"
+            case .mock: "Mock"
+            case let .other(desc): desc
+            }
+        }
     }
 
     let id: String

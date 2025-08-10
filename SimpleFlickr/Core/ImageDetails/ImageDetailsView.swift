@@ -14,44 +14,64 @@ struct DetailsViewDelegate {
 }
 
 struct ImageDetailsView: View {
+    private enum Constants {
+        static let hstackSpacing: CGFloat = 10
+        static let detailsSpacing: CGFloat = 20
+        static let imageSize: CGFloat = 22
+        static let lineLimit = 2
+        static let imageHeight: CGFloat = 320
+        static let backgroundPeekHeight: CGFloat = 340
+        static let cornerRadius: CGFloat = 24
+        static let strokeOpacity: Double = 0.10
+        static let strokeLineWidth: CGFloat = 1.5
+        static let backgroundBlur: CGFloat = 24
+        static let backgroundOpacity: Double = 0.8
+        static let backgroundOffsetY: CGFloat = 24
+
+        enum Text {
+            static let id: LocalizedStringKey = "detailsId"
+            static let title: LocalizedStringKey = "detailsTitle"
+            static let thumbnail: LocalizedStringKey = "detailsThumbnail"
+            static let original: LocalizedStringKey = "detailsOriginal"
+            static let source: LocalizedStringKey = "detailsSource"
+            static let size: LocalizedStringKey = "detailsSize"
+        }
+    }
+
     let delegate: DetailsViewDelegate
 
     @State var presenter: ImageDetailsPresenter
 
     var body: some View {
-        ViewThatFits(content: {
-            VStack(spacing: 10) {
-                imageSection
-                detailsSection
-            }
-
-            ScrollView {
-                VStack(spacing: 10) {
-                    imageSection
-                    detailsSection
-                }
-            }
-        })
-        .padding(10)
+        VStack(spacing: 20) {
+            imageSection
+            detailsSection
+            Spacer()
+        }
+        .padding(GlobalConstants.Size.bodyPadding)
+        .withMeshGradientBackground
         .navigationTitle(delegate.image.title)
         .navigationBarTitleDisplayMode(.inline)
-        .background(.ultraThinMaterial)
     }
 
     @ViewBuilder
     private var imageSection: some View {
         let imageUrl = delegate.image.original ?? delegate.image.thumbnail
         ImageLoaderView(url: imageUrl)
-            .frame(height: 320)
+            .frame(height: Constants.imageHeight)
             .frame(maxWidth: .infinity)
-            .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-            .shadow(color: .black.opacity(0.08), radius: 16, y: 6)
+            .clipShape(RoundedRectangle(cornerRadius: Constants.cornerRadius, style: .continuous))
+            .shadow(
+                color: GlobalConstants.Shadow.color,
+                radius: GlobalConstants.Shadow.radius,
+                y: GlobalConstants.Shadow.shadowY
+            )
             .overlay(
-                RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .strokeBorder(Color.primary.opacity(0.10), lineWidth: 1.5)
+                RoundedRectangle(cornerRadius: GlobalConstants.Size.cornerRadius, style: .continuous)
+                    .strokeBorder(Color.primary.opacity(Constants.strokeOpacity), lineWidth: Constants.strokeLineWidth)
             )
             .background(
-                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                RoundedRectangle(cornerRadius: GlobalConstants.Size.cornerRadius, style: .continuous)
                     .fill(
                         LinearGradient(
                             colors: [.indigo.opacity(0.22), .blue.opacity(0.12)],
@@ -59,14 +79,12 @@ struct ImageDetailsView: View {
                             endPoint: .bottomTrailing
                         )
                     )
-                    .blur(radius: 24)
-                    .opacity(0.8)
-                    .offset(y: 24)
-                    .frame(height: 340) // Slightly larger to peek around the image
+                    .blur(radius: Constants.backgroundBlur)
+                    .opacity(Constants.backgroundOpacity)
+                    .offset(y: Constants.backgroundOffsetY)
+                    .frame(height: Constants.backgroundPeekHeight) // Slightly larger to peek around the image
             )
-            .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-            .padding(.horizontal, -12)
-            .padding(.top, 2)
+            .clipShape(RoundedRectangle(cornerRadius: GlobalConstants.Size.cornerRadius, style: .continuous))
             .anyButton {
                 presenter.heroImageDidTap(url: imageUrl)
             }
@@ -75,56 +93,58 @@ struct ImageDetailsView: View {
 
     @ViewBuilder
     private var detailsSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            labeledRow(systemName: "number", label: "ID", value: delegate.image.id)
-            labeledRow(systemName: "textformat", label: "Title", value: delegate.image.title)
-            labeledRow(systemName: "link", label: "Thumbnail", value: delegate.image.thumbnail.absoluteString)
-            labeledRow(systemName: "photo", label: "Original", value: delegate.image.original?.absoluteString ?? "—")
-            labeledRow(systemName: "person.crop.square", label: "Source", value: sourceText)
-            HStack(spacing: 12) {
-                Image(systemName: "aspectratio").foregroundStyle(.secondary)
-                Text("Size: \(sizeText)").font(.callout)
-            }
+        Grid(horizontalSpacing: Constants.hstackSpacing, verticalSpacing: Constants.detailsSpacing) {
+            gridRow(systemName: "number", label: Constants.Text.id, value: delegate.image.id)
+            gridRow(systemName: "textformat", label: Constants.Text.title, value: delegate.image.title)
+            gridRow(systemName: "link", label: Constants.Text.thumbnail, value: delegate.image.thumbnail.absoluteString)
+            gridRow(systemName: "photo", label: Constants.Text.original, value: delegate.image.original?.absoluteString ?? "—")
+            gridRow(systemName: "person.crop.square", label: Constants.Text.source, value: delegate.image.source.displayName)
+            gridRow(systemName: "aspectratio", label: Constants.Text.size, value: sizeText)
         }
         .padding()
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-        .shadow(radius: 4)
+        .background(
+            .regularMaterial,
+            in: RoundedRectangle(
+                cornerRadius: GlobalConstants.Size.cornerRadius,
+                style: .continuous
+            )
+        )
+        .shadow(radius: GlobalConstants.Shadow.radius)
+        .textSelection(.enabled)
     }
 
-    // Helper for uniform labeled rows
+    // MARK: - Uniform labeled row
     @ViewBuilder
-    private func labeledRow(
+    private func gridRow(
         systemName: String,
-        label: String,
+        label: LocalizedStringKey,
         value: String
     ) -> some View {
-        HStack(spacing: 12) {
+        GridRow {
             Image(systemName: systemName)
                 .foregroundStyle(.secondary)
-            Text("\(label): ")
-                .fontWeight(.semibold)
-                .foregroundStyle(.primary)
+                .frame(width: Constants.imageSize, alignment: .leading)
+
+            Group {
+                Text(label) + Text(":")
+            }
+            .fontWeight(.semibold)
+            .gridColumnAlignment(.trailing)
+
             Text(value)
                 .font(.callout)
-                .lineLimit(2)
-                .truncationMode(.middle)
                 .foregroundStyle(.secondary)
+                .gridColumnAlignment(.leading)
+                .lineLimit(Constants.lineLimit)
+                .truncationMode(.middle)
         }
     }
 
     private var sizeText: String {
-        guard let size = delegate.image.size else { return "unknown" }
+        guard let size = delegate.image.size else { return "?" }
         let width = size.width.map { String($0) } ?? "?"
         let height = size.height.map { String($0) } ?? "?"
         return "\(width)x\(height) px"
-    }
-
-    private var sourceText: String {
-        switch delegate.image.source {
-        case .flickr: return "Flickr"
-        case .mock: return "Mock"
-        case .other(let desc): return desc
-        }
     }
 }
 
