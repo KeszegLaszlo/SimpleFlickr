@@ -7,18 +7,28 @@
 
 import Foundation
 
-struct MockImageSearchService: ImageSearchService {
-    private let delay: Double
-    private let showError: Bool
-    let apiClient: any ApiProtocol
+class MockImageSearchService: ImageSearchService {
+    var apiClient: any ApiProtocol
+
+    /// How many total pages to expose (>=1). When `1`, there is no next page.
+    private let totalPages: Int
+    /// Controls simulated failures by page number.
+    private let failingPages: Set<Int>
+
+    private(set) var callCount = 0
+    private(set) var received: [(query: String, page: Int, perPage: Int)] = []
+
+    /// Each successful call bumps the `version` so returned titles/ids differ across fetches
+    /// allowing us to assert cache-vs-network behavior.
+    private var version: Int = 0
 
     init(
-        delay: Double = 0.0,
-        showError: Bool = false,
+        totalPages: Int = 3,
+        failingPages: Set<Int> = [],
         apiClient: any ApiProtocol
     ) {
-        self.delay = delay
-        self.showError = showError
+        self.totalPages = max(1, totalPages)
+        self.failingPages = failingPages
         self.apiClient = apiClient
     }
 
@@ -27,30 +37,44 @@ struct MockImageSearchService: ImageSearchService {
         page: Int,
         perPage: Int
     ) async throws -> SearchResponse<ImageAsset> {
-        let start = (page - 1) * perPage
-        let items = (0..<perPage).compactMap { idx -> ImageAsset? in
-            let id = "mock-\(start + idx)"
-            guard let thumb = URL(string: "https://picsum.photos/seed/\(id)/200"),
-                  let full = URL(string: "https://picsum.photos/seed/\(id)/1200")
-            else { return nil }
+        callCount += 1
+        received.append((query, page, perPage))
 
+        if failingPages.contains(page) {
+            throw URLError(.badServerResponse)
+        }
+
+        version += 1
+
+        let start = (page - 1) * perPage
+        let items: [ImageAsset] = (0..<perPage).compactMap { idx in
+            let id = "test-\(query)-p\(page)-v\(version)-#\(start + idx)"
+            guard let thumb = URL(string: "https://example.com/thumb/\(id)"),
+                  let full  = URL(string: "https://example.com/full/\(id)") else { return nil }
             return ImageAsset(
                 id: id,
-                title: "\(query) #\(start + idx)",
+                title: id,
                 thumbnail: thumb,
                 original: full,
-                size: .init(width: 1200, height: 800),
+                size: .init(width: 1000, height: 800),
                 source: .mock
             )
         }
 
-        let pageMeta = Page(page: page, perPage: perPage, total: 50, pages: 50 / max(perPage, 1))
-        return SearchResponse(items: items, page: pageMeta)
+        let hasNext = page < totalPages
+        let pageMeta = Page(page: page, perPage: perPage, total: perPage * totalPages, pages: totalPages)
+        return SearchResponse(items: items, page: pageMeta.with(hasNext: hasNext))
     }
+}
 
-    private func tryShowError() throws {
-        if showError {
-            throw URLError(.unknown)
-        }
+private extension Page {
+    /// Convenience to override `hasNext` without changing other values.
+    func with(hasNext: Bool) -> Page {
+        Page(
+            page: self.page,
+            perPage: self.perPage,
+            total: self.total,
+            pages: self.pages
+        )
     }
 }

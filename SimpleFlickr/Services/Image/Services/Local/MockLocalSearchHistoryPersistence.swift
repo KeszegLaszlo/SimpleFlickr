@@ -7,19 +7,18 @@
 
 @MainActor
 struct MockLocalSearchHistoryPersistence: LocalSearchHistoryPersistence {
-    let history: [SearchElementModel]
+    var history: [SearchElementModel]
+    var mostRecent: SearchElementModel?
 
-    init(history: [SearchElementModel] = SearchElementModel.mocks) {
+    init(
+        history: [SearchElementModel] = [],
+        mostRecent: SearchElementModel? = nil
+    ) {
         self.history = history
+        self.mostRecent = mostRecent
     }
 
     func addRecentSearch(search: SearchElementModel) throws { }
-
-    func getSearchHistory() throws -> [SearchElementModel] {
-        history
-    }
-
-    func getMostRecentSearch() throws -> SearchElementModel? {
-        nil
-    }
+    func getSearchHistory() throws -> [SearchElementModel] { history }
+    func getMostRecentSearch() throws -> SearchElementModel? { mostRecent }
 }
