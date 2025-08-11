@@ -21,14 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		DA206C6C2E473FF5002D458B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DA206C562E473FF3002D458B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DA206C5D2E473FF3002D458B;
-			remoteInfo = SimpleFlickr;
-		};
-		DA206C762E473FF5002D458B /* PBXContainerItemProxy */ = {
+		DA4150082E4A096C0010A746 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DA206C562E473FF3002D458B /* Project object */;
 			proxyType = 1;
@@ -39,8 +32,7 @@
 
 /* Begin PBXFileReference section */
 		DA206C5E2E473FF3002D458B /* SimpleFlickr Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SimpleFlickr Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA206C6B2E473FF5002D458B /* SimpleFlickrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleFlickrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA206C752E473FF5002D458B /* SimpleFlickrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleFlickrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA4150042E4A096C0010A746 /* SimpleFlickrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleFlickrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAF76B4E2E49F4300046215B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,14 +74,9 @@
 			path = SimpleFlickr;
 			sourceTree = "<group>";
 		};
-		DA206C6E2E473FF5002D458B /* SimpleFlickrTests */ = {
+		DA4150052E4A096C0010A746 /* SimpleFlickrTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SimpleFlickrTests;
-			sourceTree = "<group>";
-		};
-		DA206C782E473FF5002D458B /* SimpleFlickrUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SimpleFlickrUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -112,14 +99,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DA206C682E473FF5002D458B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DA206C722E473FF5002D458B /* Frameworks */ = {
+		DA4150012E4A096C0010A746 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -135,8 +115,7 @@
 				DAF76B4E2E49F4300046215B /* Localizable.xcstrings */,
 				DA079AF12E474CC2009DC2F6 /* LocalPackages */,
 				DA206C602E473FF3002D458B /* SimpleFlickr */,
-				DA206C6E2E473FF5002D458B /* SimpleFlickrTests */,
-				DA206C782E473FF5002D458B /* SimpleFlickrUITests */,
+				DA4150052E4A096C0010A746 /* SimpleFlickrTests */,
 				DA206C5F2E473FF3002D458B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -145,8 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				DA206C5E2E473FF3002D458B /* SimpleFlickr Dev.app */,
-				DA206C6B2E473FF5002D458B /* SimpleFlickrTests.xctest */,
-				DA206C752E473FF5002D458B /* SimpleFlickrUITests.xctest */,
+				DA4150042E4A096C0010A746 /* SimpleFlickrTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -188,51 +166,28 @@
 			productReference = DA206C5E2E473FF3002D458B /* SimpleFlickr Dev.app */;
 			productType = "com.apple.product-type.application";
 		};
-		DA206C6A2E473FF5002D458B /* SimpleFlickrTests */ = {
+		DA4150032E4A096C0010A746 /* SimpleFlickrTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DA206C822E473FF5002D458B /* Build configuration list for PBXNativeTarget "SimpleFlickrTests" */;
+			buildConfigurationList = DA41500A2E4A096C0010A746 /* Build configuration list for PBXNativeTarget "SimpleFlickrTests" */;
 			buildPhases = (
-				DA206C672E473FF5002D458B /* Sources */,
-				DA206C682E473FF5002D458B /* Frameworks */,
-				DA206C692E473FF5002D458B /* Resources */,
+				DA4150002E4A096C0010A746 /* Sources */,
+				DA4150012E4A096C0010A746 /* Frameworks */,
+				DA4150022E4A096C0010A746 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				DA206C6D2E473FF5002D458B /* PBXTargetDependency */,
+				DA4150092E4A096C0010A746 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				DA206C6E2E473FF5002D458B /* SimpleFlickrTests */,
+				DA4150052E4A096C0010A746 /* SimpleFlickrTests */,
 			);
 			name = SimpleFlickrTests;
 			packageProductDependencies = (
 			);
 			productName = SimpleFlickrTests;
-			productReference = DA206C6B2E473FF5002D458B /* SimpleFlickrTests.xctest */;
+			productReference = DA4150042E4A096C0010A746 /* SimpleFlickrTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		DA206C742E473FF5002D458B /* SimpleFlickrUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DA206C852E473FF5002D458B /* Build configuration list for PBXNativeTarget "SimpleFlickrUITests" */;
-			buildPhases = (
-				DA206C712E473FF5002D458B /* Sources */,
-				DA206C722E473FF5002D458B /* Frameworks */,
-				DA206C732E473FF5002D458B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DA206C772E473FF5002D458B /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				DA206C782E473FF5002D458B /* SimpleFlickrUITests */,
-			);
-			name = SimpleFlickrUITests;
-			packageProductDependencies = (
-			);
-			productName = SimpleFlickrUITests;
-			productReference = DA206C752E473FF5002D458B /* SimpleFlickrUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -241,18 +196,14 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2600;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					DA206C5D2E473FF3002D458B = {
 						CreatedOnToolsVersion = 26.0;
 					};
-					DA206C6A2E473FF5002D458B = {
-						CreatedOnToolsVersion = 26.0;
-						TestTargetID = DA206C5D2E473FF3002D458B;
-					};
-					DA206C742E473FF5002D458B = {
-						CreatedOnToolsVersion = 26.0;
+					DA4150032E4A096C0010A746 = {
+						CreatedOnToolsVersion = 16.2;
 						TestTargetID = DA206C5D2E473FF3002D458B;
 					};
 				};
@@ -281,8 +232,7 @@
 			projectRoot = "";
 			targets = (
 				DA206C5D2E473FF3002D458B /* SimpleFlickr */,
-				DA206C6A2E473FF5002D458B /* SimpleFlickrTests */,
-				DA206C742E473FF5002D458B /* SimpleFlickrUITests */,
+				DA4150032E4A096C0010A746 /* SimpleFlickrTests */,
 			);
 		};
 /* End PBXProject section */
@@ -296,14 +246,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DA206C692E473FF5002D458B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DA206C732E473FF5002D458B /* Resources */ = {
+		DA4150022E4A096C0010A746 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -341,14 +284,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DA206C672E473FF5002D458B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DA206C712E473FF5002D458B /* Sources */ = {
+		DA4150002E4A096C0010A746 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -358,15 +294,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		DA206C6D2E473FF5002D458B /* PBXTargetDependency */ = {
+		DA4150092E4A096C0010A746 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DA206C5D2E473FF3002D458B /* SimpleFlickr */;
-			targetProxy = DA206C6C2E473FF5002D458B /* PBXContainerItemProxy */;
-		};
-		DA206C772E473FF5002D458B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DA206C5D2E473FF3002D458B /* SimpleFlickr */;
-			targetProxy = DA206C762E473FF5002D458B /* PBXContainerItemProxy */;
+			targetProxy = DA4150082E4A096C0010A746 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -484,59 +415,6 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				XROS_DEPLOYMENT_TARGET = 26.0;
-			};
-			name = Mock;
-		};
-		DA079DD52E476CBA009DC2F6 /* Mock */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 55S3BQ9659;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.keszeg.SimpleFlickrTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleFlickr.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SimpleFlickr";
-				XROS_DEPLOYMENT_TARGET = 26.0;
-			};
-			name = Mock;
-		};
-		DA079DD62E476CBA009DC2F6 /* Mock */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 55S3BQ9659;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.keszeg.SimpleFlickrUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = SimpleFlickr;
 				XROS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Mock;
@@ -768,109 +646,65 @@
 			};
 			name = Release;
 		};
-		DA206C832E473FF5002D458B /* Debug */ = {
+		DA41500B2E4A096C0010A746 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 55S3BQ9659;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.keszeg.SimpleFlickrTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleFlickr.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SimpleFlickr";
-				XROS_DEPLOYMENT_TARGET = 26.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleFlickr Dev.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SimpleFlickr Dev";
 			};
 			name = Debug;
 		};
-		DA206C842E473FF5002D458B /* Release */ = {
+		DA41500C2E4A096C0010A746 /* Mock */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 55S3BQ9659;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.keszeg.SimpleFlickrTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleFlickr.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SimpleFlickr";
-				XROS_DEPLOYMENT_TARGET = 26.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleFlickr Dev.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SimpleFlickr Dev";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Mock;
 		};
-		DA206C862E473FF5002D458B /* Debug */ = {
+		DA41500D2E4A096C0010A746 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 55S3BQ9659;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.keszeg.SimpleFlickrUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.keszeg.SimpleFlickrTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = SimpleFlickr;
-				XROS_DEPLOYMENT_TARGET = 26.0;
-			};
-			name = Debug;
-		};
-		DA206C872E473FF5002D458B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 55S3BQ9659;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.keszeg.SimpleFlickrUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = SimpleFlickr;
-				XROS_DEPLOYMENT_TARGET = 26.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleFlickr Dev.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SimpleFlickr Dev";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -897,22 +731,12 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DA206C822E473FF5002D458B /* Build configuration list for PBXNativeTarget "SimpleFlickrTests" */ = {
+		DA41500A2E4A096C0010A746 /* Build configuration list for PBXNativeTarget "SimpleFlickrTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DA206C832E473FF5002D458B /* Debug */,
-				DA079DD52E476CBA009DC2F6 /* Mock */,
-				DA206C842E473FF5002D458B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DA206C852E473FF5002D458B /* Build configuration list for PBXNativeTarget "SimpleFlickrUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DA206C862E473FF5002D458B /* Debug */,
-				DA079DD62E476CBA009DC2F6 /* Mock */,
-				DA206C872E473FF5002D458B /* Release */,
+				DA41500B2E4A096C0010A746 /* Debug */,
+				DA41500C2E4A096C0010A746 /* Mock */,
+				DA41500D2E4A096C0010A746 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -42,7 +42,7 @@ class ImageListPresenter {
     /// The current high-level view state (loading, loaded, or empty) driving the UI.
     private(set) var viewState: ImageListView.ViewState = .loading
     /// The active grid/list layout identifier used by the view to switch layouts.
-    private(set) var layyoutId = Int.random(in: 2...4)
+    private(set) var layyoutId = Int.random(in: 1...3)
 
     private var lastCommittedSearchText = ""
 
