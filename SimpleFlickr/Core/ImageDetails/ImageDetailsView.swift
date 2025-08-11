@@ -145,12 +145,13 @@ struct ImageDetailsView: View {
             Group {
                 if isLink, let url = URL(string: value) {
                     Link(value, destination: url)
+                        .foregroundStyle(.blue)
                 } else {
                     Text(value)
+                        .foregroundStyle(.secondary)
                 }
             }
             .font(.callout)
-            .foregroundStyle(.secondary)
             .gridColumnAlignment(.leading)
             .lineLimit(Constants.lineLimit)
             .truncationMode(.middle)

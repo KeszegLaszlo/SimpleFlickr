@@ -9,6 +9,7 @@ import Observation
 import SwiftUI
 import Logger
 import Utilities
+import CoreMotion
 
 /// # Overview
 /// `ImageListPresenter` manages the image list screen state, user interactions, and navigation.
@@ -42,9 +43,16 @@ class ImageListPresenter {
     /// The current high-level view state (loading, loaded, or empty) driving the UI.
     private(set) var viewState: ImageListView.ViewState = .loading
     /// The active grid/list layout identifier used by the view to switch layouts.
+    // TODO: should keep in AppStorage
     private(set) var layyoutId = Int.random(in: 1...3)
 
     private var lastCommittedSearchText = ""
+    private(set) var showLayoutSelector = false
+
+    var pitch: Double = .zero
+    var roll: Double = .zero
+    var rotation: Double = .zero
+    var motion: CMMotionManager
 
     /// The current search text. Mutated from the view and consumed by fetch operations.
     var searchText = Constants.defaultSearchText
@@ -62,7 +70,31 @@ class ImageListPresenter {
     init(interactor: any ImageListInteractor, router: any ImageListRouter) {
         self.interactor = interactor
         self.router = router
+        motion = CMMotionManager()
+        motion.deviceMotionUpdateInterval = 1/60
+        motion.startDeviceMotionUpdates(to: .main) { (motionData, error) in
+            guard error == nil else { return }
+
+            if let motionData = motionData {
+                self.pitch = motionData.attitude.pitch
+                self.roll = motionData.attitude.roll
+                self.rotation = motionData.rotationRate.x
+            }
+        }
         getLatestSearch()
+    }
+
+    func updateLayoudId(to id: Int) {
+        withAnimation(.spring(response: 0.8, dampingFraction: 0.6)) {
+            layyoutId = id
+            showLayoutSelector = false
+        }
+    }
+
+    func toggleLayoutSelector() {
+        withAnimation(.spring(response: 0.8, dampingFraction: 0.6)) {
+            showLayoutSelector.toggle()
+        }
     }
 
     /// Call from the view's `.onAppear` or `.task` to track screen impressions.

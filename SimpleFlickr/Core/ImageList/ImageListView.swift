@@ -2,7 +2,7 @@
 //  ImegeListView.swift
 //  SimpleFlickr
 //
-//  Created by Keszeg László on 2025. 08. 09.
+//  Created yPosition Keszeg László on 2025. 08. 09.
 //
 
 import SwiftUI
@@ -30,9 +30,35 @@ struct ImageListView: View {
             static let chipSpacing: CGFloat = 10
             static let searchHistoryHorizontalPadding: CGFloat = 16
             static let searchHistoryVerticalPadding: CGFloat = 4
+            static let panelSize: CGFloat = 180
+            static let panelPadding: CGFloat = 16
+
+            enum CanvasButton {
+                static let anchorPadding: CGFloat = 44
+                static let radialSpacing: CGFloat = 100
+                static let diagonalSpacing: CGFloat = 100
+                static let outerRing: CGFloat = 208
+                static let innerRingSmall: CGFloat = 60
+                static let innerRingMedium: CGFloat = 80
+                static let hitCircleDiameter: CGFloat = 76
+                static let panelYOffset: CGFloat = -29
+            }
         }
 
         static let textfieldImageName: String = "magnifyingglass"
+
+        enum ImagesScrollView {
+            static let reducedScale: CGFloat = 0.8
+            static let rotationDegreesWhenShown: Double = 20
+            static let basePitch: CGFloat = 1
+            static let shadowRadius: CGFloat = 50
+            static let shadowYOffset: CGFloat = 50
+            static let gradientLeadingOpacity: Double = 0.6
+            static let gradientTrailingOpacity: Double = 0.3
+            static let gradientStartPoint: UnitPoint = .topLeading
+            static let gradientEndPoint: UnitPoint = .bottomTrailing
+            static let blendMode: BlendMode = .overlay
+        }
     }
 
     enum ViewState: Equatable {
@@ -43,6 +69,7 @@ struct ImageListView: View {
     @State var presenter: ImageListPresenter
     @FocusState var isTextFieldIsFocused: Bool
     @State private var shouldAnimateFocus: Bool = false
+    @State var dragOffset: CGSize = .zero
 
     var body: some View {
         VStack(spacing: .zero) {
@@ -51,10 +78,13 @@ struct ImageListView: View {
                 noResultsView(reason)
             case .loading:
                 ProgressView()
-                  .tint(.indigo)
-                  .controlSize(.large)
+                    .tint(.indigo)
+                    .controlSize(.large)
             case .loaded:
-                loadedView
+                imagesScrollView
+                .overlay(alignment: .bottomTrailing) {
+                    buttons
+                }
             }
         }
         .blur(radius: isTextFieldIsFocused ? 10 : .zero)
@@ -95,6 +125,37 @@ struct ImageListView: View {
         }
     }
 
+    private var imagesScrollView: some View {
+        ZStack {
+            loadedView
+                .scaleEffect(presenter.showLayoutSelector ? Constants.ImagesScrollView.reducedScale : 1)
+                .rotation3DEffect(
+                    .degrees(presenter.showLayoutSelector ? Constants.ImagesScrollView.rotationDegreesWhenShown : .zero),
+                    axis: (x: Constants.ImagesScrollView.basePitch - presenter.pitch, y: presenter.roll, z: .zero)
+                )
+                .shadow(
+                    color: GlobalConstants.Shadow.color,
+                    radius: Constants.ImagesScrollView.shadowRadius,
+                    x: .zero,
+                    y: Constants.ImagesScrollView.shadowYOffset
+                )
+
+            LinearGradient(
+                colors: [
+                    .secondary.opacity(Constants.ImagesScrollView.gradientLeadingOpacity),
+                    .secondary.opacity(Constants.ImagesScrollView.gradientTrailingOpacity)
+                ],
+                startPoint: Constants.ImagesScrollView.gradientStartPoint,
+                endPoint: Constants.ImagesScrollView.gradientEndPoint
+            )
+            .opacity(presenter.showLayoutSelector ? 1 : .zero)
+            .onTapGesture {
+                presenter.toggleLayoutSelector()
+            }
+            .blendMode(Constants.ImagesScrollView.blendMode)
+        }
+    }
+
     private var loadedView: some View {
         ScrollView(.vertical) {
             LazyVStack(spacing: Constants.Size.scrollItemSpacing) {
@@ -105,7 +166,6 @@ struct ImageListView: View {
                         .tint(.accent)
                 }
             }
-            .animation(.bouncy, value: presenter.images)
             .padding(GlobalConstants.Size.bodyPadding)
         }
         .scrollDisabled(isTextFieldIsFocused)
@@ -117,6 +177,9 @@ struct ImageListView: View {
         }
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.immediately)
+        .animation(nil, value: presenter.showLayoutSelector)
+        .animation(nil, value: presenter.images)
+        .animation(nil, value: shouldAnimateFocus)
         .scrollTargetLayout()
         .contentShape(Rectangle())
         .onTapGesture {
@@ -166,7 +229,7 @@ struct ImageListView: View {
     @ViewBuilder
     private var searchHistory: some View {
         if shouldAnimateFocus {
-            ScrollView(.horizontal, showsIndicators: false) {
+            ScrollView(.horizontal) {
                 HStack(spacing: Constants.Size.chipSpacing) {
                     ForEach(presenter.searchResults) { search in
                         chipView(for: search)
@@ -175,6 +238,7 @@ struct ImageListView: View {
                 .padding(.horizontal, Constants.Size.searchHistoryHorizontalPadding)
                 .padding(.vertical, Constants.Size.searchHistoryVerticalPadding)
             }
+            .scrollIndicators(.hidden)
             .transition(
                 .asymmetric(
                     insertion: .move(edge: .leading),
@@ -209,6 +273,148 @@ struct ImageListView: View {
             }
             .accessibilityLabel(Text(Constants.Text.a11yChipLabel(search.title)))
             .accessibilityHint(Text(Constants.Text.a11yChipHint))
+    }
+}
+
+// Should move this canvas view to UserInterface package
+private extension ImageListView {
+    var buttons: some View {
+        ZStack {
+            Rectangle()
+                .fill(presenter.showLayoutSelector ? .ultraThinMaterial : .ultraThickMaterial)
+                .overlay(Rectangle().fill(.black.opacity(0.5)).blendMode(.softLight))
+                .mask(
+                    canvas.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                )
+                .shadow(color: .white.opacity(0.2), radius: 0, x: -1, y: -1)
+                .shadow(color: .black.opacity(0.2), radius: 0, x: 1, y: 1)
+                .shadow(color: .black.opacity(0.5), radius: 10, x: 10, y: 10)
+                .overlay(
+                    GeometryReader { geo in
+                        let xPosition = geo.size.width - Constants.Size.CanvasButton.anchorPadding
+                        let yPosition = geo.size.height - Constants.Size.CanvasButton.anchorPadding
+                        ZStack {
+                            // main toggle icon on the center circle
+                            Image(systemName: "squares.leading.rectangle")
+                                .font(.system(size: 30))
+                                .rotationEffect(.degrees(presenter.showLayoutSelector ? 45 : 0), anchor: .center)
+                                .foregroundColor(.white)
+                                .position(x: xPosition, y: yPosition)
+
+                            Group {
+                                Image(systemName: "rectangle")
+                                    .foregroundColor(.white)
+                                    .position(x: xPosition, y: yPosition - Constants.Size.CanvasButton.radialSpacing)
+                                    .anyButton {
+                                        presenter.updateLayoudId(to: 1)
+                                    }
+
+                                Image(systemName: "rectangle.split.2x1")
+                                    .foregroundColor(.white)
+                                    .position(x: xPosition - Constants.Size.CanvasButton.radialSpacing, y: yPosition)
+                                    .anyButton {
+                                        presenter.updateLayoudId(to: 2)
+
+                                    }
+
+                                Image(systemName: "rectangle.split.3x1")
+                                    .foregroundColor(.white)
+                                    .position(x: xPosition - Constants.Size.CanvasButton.diagonalSpacing, y: yPosition - Constants.Size.CanvasButton.diagonalSpacing)
+                                    .anyButton {
+                                        presenter.updateLayoudId(to: 3)
+                                    }
+                            }
+                            .blur(radius: presenter.showLayoutSelector ? .zero : 10)
+                            .opacity(presenter.showLayoutSelector ? 1 : .zero)
+                            .scaleEffect(presenter.showLayoutSelector ? 1 : 0.5)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                    }
+                )
+                .background(
+                    GeometryReader { geo in
+                        let xPosition = geo.size.width - Constants.Size.CanvasButton.anchorPadding
+                        let yPosition = geo.size.height - Constants.Size.CanvasButton.anchorPadding
+                        ZStack {
+                            // central visual ring
+                            circle.frame(width: Constants.Size.CanvasButton.outerRing)
+                                .position(x: xPosition, y: yPosition)
+                            // inner rings
+                            circle.frame(width: Constants.Size.CanvasButton.innerRingSmall)
+                                .position(x: xPosition, y: yPosition)
+                            circle.frame(width: Constants.Size.CanvasButton.innerRingMedium)
+                                .position(x: xPosition, y: yPosition)
+                        }
+                        .scaleEffect(presenter.showLayoutSelector ? 1 : 0.8, anchor: .center)
+                        .opacity(presenter.showLayoutSelector ? 1 : .zero)
+                        .animation(.easeOut(duration: 0.3), value: presenter.showLayoutSelector)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                    }
+                )
+                .offset(y: Constants.Size.CanvasButton.panelYOffset)
+        }
+        // Limit hit-test area so the overlay doesn't swallow ScrollView gestures
+        .frame(width: Constants.Size.panelSize, height: Constants.Size.panelSize)
+        .padding(Constants.Size.panelPadding)
+        .onTapGesture {
+            presenter.toggleLayoutSelector()
+        }
+        .gesture(drag)
+    }
+
+    var circle: some View {
+        Circle().stroke(lineWidth: 1).fill(.linearGradient(colors: [Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.5)), Color(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 0))], startPoint: .topLeading, endPoint: .bottomTrailing))
+    }
+
+    var canvas: some View {
+        Canvas { context, size in
+            context.addFilter(.alphaThreshold(min: 0.8, color: .blue))
+            context.addFilter(.blur(radius: 10))
+            context.drawLayer { ctx in
+                for index in 1...5 {
+                    if let resolvedView = context.resolveSymbol(id: index) {
+                        ctx.draw(resolvedView, at: CGPoint(x: size.width - Constants.Size.CanvasButton.anchorPadding, y: size.height - Constants.Size.CanvasButton.anchorPadding))
+                    }
+                }
+            }
+        } symbols: {
+            Circle()
+                .fill(.black)
+                .frame(width: Constants.Size.CanvasButton.hitCircleDiameter, height: Constants.Size.CanvasButton.hitCircleDiameter)
+                .tag(1)
+            Circle()
+                .fill(.black)
+                .frame(width: Constants.Size.CanvasButton.hitCircleDiameter, height: Constants.Size.CanvasButton.hitCircleDiameter)
+                .offset(dragOffset)
+                .tag(2)
+            Circle()
+                .fill(.black)
+                .frame(width: Constants.Size.CanvasButton.hitCircleDiameter, height: Constants.Size.CanvasButton.hitCircleDiameter)
+                .offset(y: presenter.showLayoutSelector ? -Constants.Size.CanvasButton.radialSpacing : .zero)
+                .tag(3)
+            Circle()
+                .fill(.black)
+                .frame(width: Constants.Size.CanvasButton.hitCircleDiameter, height: Constants.Size.CanvasButton.hitCircleDiameter)
+                .offset(x: presenter.showLayoutSelector ? -Constants.Size.CanvasButton.radialSpacing : .zero)
+                .tag(4)
+            Circle()
+                .fill(.black)
+                .frame(width: Constants.Size.CanvasButton.hitCircleDiameter, height: Constants.Size.CanvasButton.hitCircleDiameter)
+                .offset(x: presenter.showLayoutSelector ? -Constants.Size.CanvasButton.diagonalSpacing : .zero, y: presenter.showLayoutSelector ? -Constants.Size.CanvasButton.diagonalSpacing : .zero)
+                .tag(5)
+        }
+    }
+
+    var drag: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                dragOffset = value.translation
+            }
+            .onEnded { _ in
+                withAnimation(.interactiveSpring(response: 0.6, dampingFraction: 0.7, blendDuration: 0.7)) {
+                    dragOffset = .zero
+                }
+            }
     }
 }
 

@@ -51,7 +51,6 @@ struct MediaPreviewView: View {
             .accessibilityElement(children: .contain)
             .accessibilityLabel(Text(mediaAccessibilityLabel))
             .accessibilityHint(Text(Constants.Text.closeHint))
-            .withMeshGradientBackground
             .overlay(alignment: .topTrailing) {
                 FancyButton(style: .xmark, size: Constants.mediaButtonSize) {
                     Task { @MainActor in
@@ -69,7 +68,11 @@ struct MediaPreviewView: View {
     private var content: some View {
         switch delegate.mediaContent {
         case let .singleImage(url):
-            imageView(url: url)
+            ZStack {
+                imageView(url: url, resizingMode: .fill)
+                    .blur(radius: 15)
+                imageView(url: url, resizingMode: .fit)
+            }
         case .images:
             EmptyView()
             // Handle multiple image carrousel if needed
@@ -79,8 +82,8 @@ struct MediaPreviewView: View {
     /// Creates an image view for a given image URL.
     /// - Parameter url: The URL of the image to be displayed.
     /// - Returns: A SwiftUI view displaying the image.
-    private func imageView(url: URL) -> some View {
-        ImageLoaderView(url: url, resizingMode: .fit)
+    private func imageView(url: URL, resizingMode: ContentMode) -> some View {
+        ImageLoaderView(url: url, resizingMode: resizingMode)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .ignoresSafeArea()
     }

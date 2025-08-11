@@ -18,12 +18,12 @@ public extension FancyButton {
         }
         public var foregroundColor: Color {
             switch self {
-            case .xmark: .white
+            case .xmark: .black
             }
         }
         public var backgroundColor: Color {
             switch self {
-            case .xmark: .secondary
+            case .xmark: .white
             }
         }
     }
