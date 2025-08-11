@@ -44,7 +44,7 @@ struct MockImageSearchService: ImageSearchService {
             )
         }
 
-        let pageMeta = Page(page: page, perPage: perPage, total: 10_000, pages: 10_000 / max(perPage, 1))
+        let pageMeta = Page(page: page, perPage: perPage, total: 50, pages: 50 / max(perPage, 1))
         return SearchResponse(items: items, page: pageMeta)
     }
 

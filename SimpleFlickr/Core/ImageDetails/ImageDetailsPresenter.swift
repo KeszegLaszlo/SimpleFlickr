@@ -7,6 +7,7 @@
 
 import Observation
 import SwiftUI
+import Logger
 
 /// The presenter responsible for managing the image details screen logic.
 /// Handles user interactions and coordinates navigation via the router.

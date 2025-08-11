@@ -68,7 +68,11 @@ struct ImageListView: View {
             Task { await presenter.onFocusChanged(focused) }
         }
         .onFirstTask { await presenter.loadImages() }
-        .onFirstAppear { presenter.onAppear() }
+        .onFirstAppear {
+            Task { @MainActor in
+                presenter.onAppear()
+            }
+        }
     }
 
     @ViewBuilder

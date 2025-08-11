@@ -161,7 +161,7 @@
 				DA206C5A2E473FF3002D458B /* Sources */,
 				DA206C5B2E473FF3002D458B /* Frameworks */,
 				DA206C5C2E473FF3002D458B /* Resources */,
-				DA206C8E2E47454D002D458B /* SwiftLint run script */,
+				DA414FFF2E49F8AB0010A746 /* Run SwiftLint Script */,
 			);
 			buildRules = (
 			);
@@ -313,9 +313,8 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		DA206C8E2E47454D002D458B /* SwiftLint run script */ = {
+		DA414FFF2E49F8AB0010A746 /* Run SwiftLint Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -323,7 +322,7 @@
 			);
 			inputPaths = (
 			);
-			name = "SwiftLint run script";
+			name = "Run SwiftLint Script";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -331,7 +330,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Check if running Xcode Cloud\nif [[ -z \"$CI\" ]]; then\n    if [[ \"$(uname -m)\" == arm64 ]]; then\n        export PATH=\"/opt/homebrew/bin:$PATH\"\n    fi\n\n    # Check if running in a SwiftUI preview\n    if [ \"$XCODE_RUNNING_FOR_PREVIEWS\" != \"1\" ]; then\n        if which swiftlint > /dev/null; then\n            swiftlint # Uncomment if you want to auto-fix: swiftlint --fix &&\n        else\n            echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n        fi\n    fi\nelse \n    # Running Xcode Cloud\n    echo \"Running in Xcode Cloud. Skipping SwiftLint.\"\nfi\n";
-			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -36,11 +36,11 @@ extension View {
         background(Color.black.opacity(0.001))
     }
 
-    public func onFirstAppear(action: @escaping () -> Void) -> some View {
+    public func onFirstAppear(action: @escaping @Sendable () -> Void) -> some View {
         modifier(OnFirstAppearViewModifier(action: action))
     }
 
-    public func onFirstTask(action: @escaping () async -> Void) -> some View {
+    public func onFirstTask(action: @escaping @Sendable () async -> Void) -> some View {
         modifier(OnFirstTaskViewModifier(action: action))
     }
 
