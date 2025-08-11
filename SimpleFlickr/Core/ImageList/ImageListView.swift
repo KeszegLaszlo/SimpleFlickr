@@ -56,8 +56,8 @@ struct ImageListView: View {
             static let basePitch: CGFloat = 1
             static let shadowRadius: CGFloat = 50
             static let shadowYOffset: CGFloat = 50
-            static let gradientLeadingOpacity: Double = 0.6
-            static let gradientTrailingOpacity: Double = 0.3
+            static let gradientLeadingOpacity: Double = 0.4
+            static let gradientTrailingOpacity: Double = 0.1
             static let gradientStartPoint: UnitPoint = .topLeading
             static let gradientEndPoint: UnitPoint = .bottomTrailing
             static let blendMode: BlendMode = .overlay
@@ -146,8 +146,8 @@ struct ImageListView: View {
 
             LinearGradient(
                 colors: [
-                    .secondary.opacity(Constants.ImagesScrollView.gradientLeadingOpacity),
-                    .secondary.opacity(Constants.ImagesScrollView.gradientTrailingOpacity)
+                    .accent.opacity(Constants.ImagesScrollView.gradientLeadingOpacity),
+                    .accent.opacity(Constants.ImagesScrollView.gradientTrailingOpacity)
                 ],
                 startPoint: Constants.ImagesScrollView.gradientStartPoint,
                 endPoint: Constants.ImagesScrollView.gradientEndPoint
