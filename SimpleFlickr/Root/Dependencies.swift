@@ -41,8 +41,6 @@ struct Dependencies {
     let container: DependencyContainer
     let logManager: LogManager
 
-    /// Initializes the application dependencies for the given build configuration.
-    ///
     /// This initializer wires up all major application services based on the
     /// current build environment:
     ///
@@ -85,7 +83,6 @@ struct Dependencies {
     /// - Parameter config: The build configuration determining which services to initialize.
     /// - Throws: `DependencyError.missingAPIKey` if a live configuration is used but
     ///           the API key could not be loaded from the bundle.
-    // swiftlint:disable:next function_body_length
     init(config: BuildConfiguration) throws {
         let imageSearchService: any ImageSearchService
         let localSearchHistoryService: any LocalSearchHistoryPersistence

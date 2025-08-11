@@ -31,8 +31,8 @@ struct MediaPreviewView: View {
     private enum Constants {
         static let mediaButtonSize: CGFloat = 30
 
-        @MainActor
-        enum Text {
+        // swiftlint:disable:next nesting
+        @MainActor enum Text {
             static let closeHint: LocalizedStringKey = "a11y.media_preview.close_hint"
             static func singleImageLabel(_ title: String) -> LocalizedStringKey { "a11y.media_preview.single_image_label \(title)" }
             static let multipleImagesLabel: LocalizedStringKey = "a11y.media_preview.multiple_images_label"

@@ -12,6 +12,7 @@ import UserInterface
 struct ImageListView: View {
     private enum Constants {
         @MainActor
+        // swiftlint:disable:next nesting
         enum Text {
             static let placeholder: LocalizedStringKey = "placeholder"
             static let a11ySearchLabel: LocalizedStringKey = "a11y.search.label"
@@ -22,7 +23,7 @@ struct ImageListView: View {
             static let a11yChipHint: LocalizedStringKey = "a11y.search_chip.hint"
             static func a11yChipLabel(_ title: String) -> LocalizedStringKey { "a11y.search_chip.label \(title)" }
         }
-
+        // swiftlint:disable:next nesting
         enum Size {
             static let scrollItemSpacing: CGFloat = 6
             static let horizontalChipPadding: CGFloat = 18
@@ -33,6 +34,7 @@ struct ImageListView: View {
             static let panelSize: CGFloat = 180
             static let panelPadding: CGFloat = 16
 
+            // swiftlint:disable:next nesting
             enum CanvasButton {
                 static let anchorPadding: CGFloat = 44
                 static let radialSpacing: CGFloat = 100
@@ -47,6 +49,7 @@ struct ImageListView: View {
 
         static let textfieldImageName: String = "magnifyingglass"
 
+        // swiftlint:disable:next nesting
         enum ImagesScrollView {
             static let reducedScale: CGFloat = 0.8
             static let rotationDegreesWhenShown: Double = 20
@@ -62,6 +65,7 @@ struct ImageListView: View {
     }
 
     enum ViewState: Equatable {
+        // swiftlint:disable:next nesting
         enum EmptyReason: Equatable { case notFoundForString(searchText: String), noFetchedResults}
         case empty(EmptyReason), loading, loaded
     }

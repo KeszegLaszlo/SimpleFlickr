@@ -30,8 +30,8 @@ struct ImageDetailsView: View {
         static let backgroundOffsetY: CGFloat = 24
         static let imageBackgroundOpcity: CGFloat = 0.12
 
-        @MainActor
-        enum Text {
+        // swiftlint:disable:next nesting
+        @MainActor enum Text {
             static let id: LocalizedStringKey = "detailsId"
             static let title: LocalizedStringKey = "detailsTitle"
             static let thumbnail: LocalizedStringKey = "detailsThumbnail"

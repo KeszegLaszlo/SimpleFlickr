@@ -33,7 +33,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
 
         config.configure()
-        //TODO: Handle initialization error
+        // TODO: [09/25/2025] Handle initialization error
         dependencies = try? Dependencies(config: config)
         builder = RootBuilder(
             interactor: RootInteractor(container: dependencies.container),

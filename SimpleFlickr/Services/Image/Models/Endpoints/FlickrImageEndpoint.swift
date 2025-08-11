@@ -11,7 +11,7 @@ import CustomNetworking
 enum FlickrImageEndpoint: EndpointProvider {
     case search(query: String, page: Int, perPage: Int)
 
-    //TODO: Handle api injection sendable
+    // TODO: [09/25/2025] Handle api injection sendable
     nonisolated(unsafe) static var injectedAPIKey: String?
 
     var scheme: String { NetworkingConstants.httpsScheme }

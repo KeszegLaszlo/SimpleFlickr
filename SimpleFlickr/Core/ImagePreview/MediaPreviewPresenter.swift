@@ -30,14 +30,12 @@ class MediaPreviewPresenter {
         interactor.trackScreenEvent(event: Event.viewAppeared)
     }
 
-
     /// Handles the action when the close button is tapped.
     /// Calls the router to dismiss the current screen.
     func closeButtonDidTap() {
         interactor.trackEvent(event: Event.closeButtonDidTap)
         router.dismissScreen()
     }
-
 
     /// Analytics and diagnostic events emitted by `MediaPreviewPresenter`.
     private enum Event: LoggableEvent {

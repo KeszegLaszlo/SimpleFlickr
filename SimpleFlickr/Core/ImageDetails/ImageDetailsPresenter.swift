@@ -31,7 +31,6 @@ class ImageDetailsPresenter {
         interactor.trackScreenEvent(event: Event.viewAppeared)
     }
 
-
     /// Handles the event when the main image is tapped.
     /// - Parameter url: The URL of the tapped image.
     /// Triggers the router to present the image in a preview view.
@@ -39,7 +38,6 @@ class ImageDetailsPresenter {
         interactor.trackEvent(event: Event.heroImageDidTap(urlString: url.absoluteString))
         router.showImagePreview(delegate: .init(mediaContent: .singleImage(url)))
     }
-
 
     /// Analytics and diagnostic events emitted by `ImageDetailsPresenter`.
     private enum Event: LoggableEvent {

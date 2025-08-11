@@ -9,12 +9,14 @@ import SwiftUI
 
 public struct CustomTextField: View {
     private enum Constants {
+        // swiftlint:disable:next nesting
         enum Animation {
             static let response: CGFloat = 0.35
             static let dampingFraction: CGFloat = 0.6
             static let blendDuration: CGFloat = 0.5
         }
 
+        // swiftlint:disable:next nesting
         enum Layout {
             static let verticalPadding: CGFloat = 12
             static let horizontalPadding: CGFloat = 15
