@@ -79,8 +79,8 @@ class ImageSearchManager {
     func getSearchHistory() throws -> [SearchElementModel] {
         // Return history excluding the most recent item
         var history = try localService.getSearchHistory()
-        if let recent = try localService.getMostRecentSearch(),
-           let index = history.firstIndex(of: recent) {
+        let recent = try localService.getMostRecentSearch()
+        if let index = history.firstIndex(of: recent) {
             history.remove(at: index)
         }
         return history
@@ -90,7 +90,7 @@ class ImageSearchManager {
     ///
     /// - Returns: The last stored search or `nil` if none exists.
     /// - Throws: Rethrows persistence errors.
-    func recentSearch() throws -> SearchElementModel? {
+    func recentSearch() throws -> SearchElementModel {
         try localService.getMostRecentSearch()
     }
 

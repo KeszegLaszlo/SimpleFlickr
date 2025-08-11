@@ -9,5 +9,5 @@
 protocol LocalSearchHistoryPersistence {
     func addRecentSearch(search: SearchElementModel) throws
     func getSearchHistory() throws -> [SearchElementModel]
-    func getMostRecentSearch() throws -> SearchElementModel?
+    func getMostRecentSearch() throws -> SearchElementModel
 }

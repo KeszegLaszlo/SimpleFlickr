@@ -40,23 +40,11 @@ struct SwiftDataLocalSearchHistoryPersistenceTests {
         #expect(fetched.map(\.title) == ["a", "b"])
     }
 
-    @Test("getMostRecentSearch returns nil when no entries")
-    func mostRecentNilWhenEmpty() throws {
-        let mock = MockLocalSearchHistoryPersistence()
-        #expect(try mock.getMostRecentSearch() == nil)
-    }
-
-    @Test("getMostRecentSearch ignores empty title")
-    func mostRecentIgnoresEmptyTitle() throws {
-        let mock = MockLocalSearchHistoryPersistence(mostRecent: SearchElementModel(title: ""))
-        #expect(try mock.getMostRecentSearch() == nil)
-    }
-
     @Test("getMostRecentSearch returns the latest by dateCreated")
     func mostRecentReturnsLatest() throws {
         let newer = SearchElementModel(title: "new", dateCreated: Date())
         let mock = MockLocalSearchHistoryPersistence(mostRecent: newer)
         let recent = try mock.getMostRecentSearch()
-        #expect(recent?.title == "new")
+        #expect(recent.title == "new")
     }
 }

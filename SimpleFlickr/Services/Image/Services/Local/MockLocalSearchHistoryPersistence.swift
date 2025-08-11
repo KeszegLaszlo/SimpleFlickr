@@ -29,9 +29,8 @@ struct MockLocalSearchHistoryPersistence: LocalSearchHistoryPersistence {
             return model
         }
     }
-    func getMostRecentSearch() throws -> SearchElementModel? {
-        guard let mostRecent else { return nil }
-        let trimmed = mostRecent.title.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmed.isEmpty ? nil : mostRecent
+    func getMostRecentSearch() throws -> SearchElementModel {
+        guard let mostRecent else { return .init(title: "dog") }
+        return mostRecent
     }
 }

@@ -7,9 +7,56 @@
 
 import SwiftData
 import SwiftUI
+import Utilities
+
+/// A default `SearchElementEntity` instance used for preloading.
+///
+/// This is primarily used during the app's first launch to populate the database
+/// with a default search item so that the search history has meaningful initial content.
+/// The current default value uses the title `"dog"`.
+extension SearchElementEntity {
+    static let defaultSearchText = "dog"
+    static var defaultValue: SearchElementEntity {
+        .init(from: .init(title: defaultSearchText))
+    }
+}
+
+/// A SwiftData container setup for managing `SearchElementEntity` records.
+///
+/// This container is configured to:
+/// - Initialize the underlying `ModelContainer` with the `SearchElementEntity` schema.
+/// - Detect if the application is being launched for the first time (via `isFirstTimeLaunch`).
+/// - If it is the first launch, preload the database with `SearchElementEntity.defaultValue`
+///   so that the user starts with an initial example in the search history.
+///
+/// The `isFirstTimeLaunch` flag is persisted using the `@UserDefault` property wrapper
+/// to ensure this preloading happens only once across app launches.
+actor SearchElementContainer {
+    @UserDefault(key: "isFirstTimeLaunch", startingValue: true)
+    private static var isFirstTimeLaunch: Bool
+
+    /// Creates and configures a `ModelContainer` for search history persistence.
+    ///
+    /// - Returns: A fully initialized `ModelContainer` with optional preloaded data
+    ///   if the app is being launched for the first time.
+    @MainActor
+    static func create() -> ModelContainer {
+        let schema = Schema([SearchElementEntity.self])
+        let configuration = ModelConfiguration()
+        // swiftlint:disable:next force_try
+        let container = try! ModelContainer(for: schema, configurations: [configuration])
+        if isFirstTimeLaunch {
+            isFirstTimeLaunch = false
+            container.mainContext.insert(SearchElementEntity.defaultValue)
+        }
+
+        return container
+    }
+}
 
 @MainActor
 struct SwiftDataLocalSearchHistoryPersistence: LocalSearchHistoryPersistence {
+
     private let container: ModelContainer
     
     private var mainContext: ModelContext {
@@ -17,8 +64,7 @@ struct SwiftDataLocalSearchHistoryPersistence: LocalSearchHistoryPersistence {
     }
     
     init() {
-        // swiftlint:disable:next force_try
-        self.container = try! ModelContainer(for: SearchElementEntity.self)
+        self.container = SearchElementContainer.create()
     }
 
     func addRecentSearch(search: SearchElementModel) throws {
@@ -60,17 +106,13 @@ struct SwiftDataLocalSearchHistoryPersistence: LocalSearchHistoryPersistence {
     ///
     /// - Returns: The most recent `SearchElementModel` if available and valid; otherwise `nil`.
     /// - Throws: Rethrows any Core Data fetch errors from `mainContext`.
-    func getMostRecentSearch() throws -> SearchElementModel? {
+    func getMostRecentSearch() throws -> SearchElementModel {
         var descriptor = FetchDescriptor<SearchElementEntity>(
             sortBy: [SortDescriptor(\.dateCreated, order: .reverse)]
         )
         descriptor.fetchLimit = 1
         let entities = try mainContext.fetch(descriptor)
-        if let model = entities.first?.toModel(),
-           !model.title.isEmpty {
-            return model
-        } else {
-            return nil
-        }
+        let model = entities.first ?? .defaultValue
+        return model.toModel()
     }
 }

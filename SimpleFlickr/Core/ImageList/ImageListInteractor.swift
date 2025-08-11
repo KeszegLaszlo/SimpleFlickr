@@ -17,7 +17,7 @@ protocol ImageListInteractor {
 
     func addRecentSearch(search: SearchElementModel) throws
     func getSearchHistory() throws -> [SearchElementModel]
-    func getMostRecentSearch() throws -> SearchElementModel?
+    func getMostRecentSearch() throws -> SearchElementModel
     func trackScreenEvent(event: LoggableEvent)
     func trackEvent(event: LoggableEvent)
 }

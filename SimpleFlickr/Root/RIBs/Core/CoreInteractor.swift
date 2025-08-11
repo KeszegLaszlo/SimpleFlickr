@@ -45,7 +45,7 @@ struct CoreInteractor: GlobalInteractor {
         try imageSearchManager.getSearchHistory()
     }
 
-    func getMostRecentSearch() throws -> SearchElementModel? {
+    func getMostRecentSearch() throws -> SearchElementModel {
         try imageSearchManager.recentSearch()
     }
 

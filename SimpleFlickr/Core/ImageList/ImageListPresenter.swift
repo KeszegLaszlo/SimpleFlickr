@@ -26,10 +26,6 @@ import CoreMotion
 @Observable
 @MainActor
 class ImageListPresenter {
-    private enum Constants {
-        static let defaultSearchText = "dog"
-    }
-
     private let interactor: any ImageListInteractor
     private let router: any ImageListRouter
 
@@ -55,7 +51,7 @@ class ImageListPresenter {
     private let motion = CMMotionManager()
 
     /// The current search text. Mutated from the view and consumed by fetch operations.
-    var searchText = Constants.defaultSearchText
+    var searchText = ""
 
     /// The reason shown when the view is in the `.empty` state, derived from the current `searchText`.
     private var emptyReason: ImageListView.ViewState.EmptyReason {
@@ -215,16 +211,23 @@ class ImageListPresenter {
         }
     }
 
-    /// Loads the most recent search from persistence and updates both `searchText` and `searchResults`.
+    /// Loads the most recent search from persistent storage and updates both `searchText` and `searchResults`.
+    ///
+    /// - Important: On the first launch, SwiftData preloads the default search term ("dog" – see `SearchElementEntity.defaultSearchText`).
+    ///   If the database query fails for any reason (unlikely), the code falls back to `defaultSearchText`,
+    ///   ensuring the UI always receives a valid initial value.
+    ///
+    /// On a successful read, the most recent entry's title is assigned to both `searchText` and `lastCommittedSearchText`,
+    /// and the entire search history is refreshed.
     private func getLatestSearch() {
         interactor.trackEvent(event: Event.getLatestSearch)
         do {
-            if let lastSearch = try interactor.getMostRecentSearch() {
-                searchText = lastSearch.title
-                lastCommittedSearchText = lastSearch.title
-            }
+            let lastSearch = try interactor.getMostRecentSearch()
+            searchText = lastSearch.title
+            lastCommittedSearchText = lastSearch.title
             searchResults = try interactor.getSearchHistory()
         } catch {
+            searchText = SearchElementEntity.defaultSearchText
             router.showAlert(error: error)
         }
     }
