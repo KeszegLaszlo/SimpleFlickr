@@ -8,5 +8,6 @@
 @MainActor
 protocol ImageListRouter {
     func showImageDetails(delegate: DetailsViewDelegate)
+    func showAlert(error: Error)
 }
 extension CoreRouter: ImageListRouter { }

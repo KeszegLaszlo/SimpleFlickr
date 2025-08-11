@@ -11,6 +11,7 @@ public struct GlobalConstants {
     public enum Size {
         public static let cornerRadius: CGFloat = 15
         public static let bodyPadding: CGFloat = 15
+        public static let blurRadius: CGFloat = 10
     }
 
     public enum Shadow {

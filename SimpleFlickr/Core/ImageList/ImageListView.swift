@@ -55,8 +55,8 @@ struct ImageListView: View {
             static let basePitch: CGFloat = 1
             static let shadowRadius: CGFloat = 50
             static let shadowYOffset: CGFloat = 50
-            static let gradientLeadingOpacity: Double = 0.6
-            static let gradientTrailingOpacity: Double = 0.3
+            static let gradientLeadingOpacity: Double = 0.4
+            static let gradientTrailingOpacity: Double = 0.1
             static let gradientStartPoint: UnitPoint = .topLeading
             static let gradientEndPoint: UnitPoint = .bottomTrailing
             static let blendMode: BlendMode = .overlay
@@ -90,7 +90,7 @@ struct ImageListView: View {
                 }
             }
         }
-        .blur(radius: isTextFieldIsFocused ? 10 : .zero)
+        .blur(radius: isTextFieldIsFocused ? GlobalConstants.Size.blurRadius : .zero)
         .animation(.bouncy, value: shouldAnimateFocus)
         .overlay(alignment: .top, content: {
             searchHistory
@@ -145,8 +145,8 @@ struct ImageListView: View {
 
             LinearGradient(
                 colors: [
-                    .secondary.opacity(Constants.ImagesScrollView.gradientLeadingOpacity),
-                    .secondary.opacity(Constants.ImagesScrollView.gradientTrailingOpacity)
+                    .accent.opacity(Constants.ImagesScrollView.gradientLeadingOpacity),
+                    .accent.opacity(Constants.ImagesScrollView.gradientTrailingOpacity)
                 ],
                 startPoint: Constants.ImagesScrollView.gradientStartPoint,
                 endPoint: Constants.ImagesScrollView.gradientEndPoint
@@ -327,7 +327,7 @@ private extension ImageListView {
                                         presenter.updateLayoudId(to: 3)
                                     }
                             }
-                            .blur(radius: presenter.showLayoutSelector ? .zero : 10)
+                            .blur(radius: presenter.showLayoutSelector ? .zero : GlobalConstants.Size.blurRadius)
                             .opacity(presenter.showLayoutSelector ? 1 : .zero)
                             .scaleEffect(presenter.showLayoutSelector ? 1 : 0.5)
                         }
@@ -372,7 +372,7 @@ private extension ImageListView {
     var canvas: some View {
         Canvas { context, size in
             context.addFilter(.alphaThreshold(min: 0.8, color: .blue))
-            context.addFilter(.blur(radius: 10))
+            context.addFilter(.blur(radius: GlobalConstants.Size.blurRadius))
             context.drawLayer { ctx in
                 for index in 1...5 {
                     if let resolvedView = context.resolveSymbol(id: index) {

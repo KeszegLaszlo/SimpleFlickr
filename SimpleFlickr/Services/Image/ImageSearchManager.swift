@@ -136,21 +136,13 @@ class ImageSearchManager {
                 perPage: ImageConstants.perPage
             )
 
-            // Compute what will actually be added (dedup vs existing cache + unique within page)
             // NOTE: The backend sometimes returns duplicate images (non-unique IDs or repeated assets (like Catty query string))
-            // within or across pages, so we must filter them out before adding to cache as a workaround.
-            let existingIDs = Set(imageCache[query]?.items.map(\.id) ?? [])
-            var seenInPage: Set<String> = []
-            let addedItems = response.items.filter { asset in
-                guard !existingIDs.contains(asset.id), !seenInPage.contains(asset.id) else { return false }
-                seenInPage.insert(asset.id)
-                return true
-            }
+            let newItems = response.items
 
             await updateCache(for: query, with: response, actualPage: actualPage)
 
             logManager.trackEvent(event: Event.success(query: query, page: actualPage))
-            return addedItems
+            return newItems
         } catch {
             logManager.trackEvent(event: Event.fail(query: query, page: actualPage))
             throw error
