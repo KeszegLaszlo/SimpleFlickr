@@ -11,9 +11,8 @@ import UserInterface
 
 struct ImageListView: View {
     private enum Constants {
-        @MainActor
         // swiftlint:disable:next nesting
-        enum Text {
+        @MainActor enum Text {
             static let placeholder: LocalizedStringKey = "placeholder"
             static let a11ySearchLabel: LocalizedStringKey = "a11y.search.label"
             static let a11ySearchHint: LocalizedStringKey = "a11y.search.hint"

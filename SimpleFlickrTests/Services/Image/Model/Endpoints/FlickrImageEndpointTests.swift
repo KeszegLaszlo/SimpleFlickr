@@ -9,6 +9,7 @@ import Foundation
 import Testing
 @testable import SimpleFlickr_Dev
 
+@MainActor
 struct FlickrImageEndpointTests {
 
     @Test("Defaults and static config")
