@@ -14,14 +14,12 @@ let package = Package(
     products: [
         .library(name: "Utilities", targets: ["Utilities"])
     ],
-    dependencies: [
-        .package(url: "https://github.com/realm/SwiftLint", exact: "0.59.1")
-    ],
+    dependencies: [],
     targets: [
         .target(
             name: "Utilities",
             swiftSettings: swiftSettings,
-            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")]
+            plugins: []
         ),
         .testTarget(
             name: "UtilitiesTests",

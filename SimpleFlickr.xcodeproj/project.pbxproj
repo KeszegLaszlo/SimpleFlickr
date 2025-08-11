@@ -17,6 +17,7 @@
 		DA0808CD2E477A0700DECBB4 /* UserInterface in Frameworks */ = {isa = PBXBuildFile; productRef = DA0808CC2E477A0700DECBB4 /* UserInterface */; };
 		DA0808D02E477A1900DECBB4 /* Utilities in Frameworks */ = {isa = PBXBuildFile; productRef = DA0808CF2E477A1900DECBB4 /* Utilities */; };
 		DA19B7022E47BAE600887078 /* CustomNetworking in Frameworks */ = {isa = PBXBuildFile; productRef = DA19B7012E47BAE600887078 /* CustomNetworking */; };
+		DAF76B4F2E49F4300046215B /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = DAF76B4E2E49F4300046215B /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		DA206C5E2E473FF3002D458B /* SimpleFlickr Dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SimpleFlickr Dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA206C6B2E473FF5002D458B /* SimpleFlickrTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleFlickrTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA206C752E473FF5002D458B /* SimpleFlickrUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleFlickrUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAF76B4E2E49F4300046215B /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -130,6 +132,7 @@
 		DA206C552E473FF3002D458B = {
 			isa = PBXGroup;
 			children = (
+				DAF76B4E2E49F4300046215B /* Localizable.xcstrings */,
 				DA079AF12E474CC2009DC2F6 /* LocalPackages */,
 				DA206C602E473FF3002D458B /* SimpleFlickr */,
 				DA206C6E2E473FF5002D458B /* SimpleFlickrTests */,
@@ -260,6 +263,7 @@
 			knownRegions = (
 				en,
 				Base,
+				hu,
 			);
 			mainGroup = DA206C552E473FF3002D458B;
 			minimizedProjectReferenceProxies = 1;
@@ -288,6 +292,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAF76B4F2E49F4300046215B /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,8 +330,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "# Check if running Xcode Cloud\nif [[ -z \"$CI\" ]]; then\n    if [[ \"$(uname -m)\" == arm64 ]]; then\n        export PATH=\"/opt/homebrew/bin:$PATH\"\n    fi\n\n    # Check if running in a SwiftUI preview\n    if [ \"$XCODE_RUNNING_FOR_PREVIEWS\" != \"1\" ]; then\n        if which swiftlint > /dev/null; then\n            swiftlint # Uncomment if you want to auto-fix: swiftlint --fix &&\n        else\n            echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n        fi\n    fi\nelse \n    # Running Xcode Cloud\n    echo \"Running in Xcode Cloud. Skipping SwiftLint.\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -430,6 +434,7 @@
 				OTHER_SWIFT_FLAGS = "-DMOCK";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Mock;
@@ -599,6 +604,7 @@
 				OTHER_SWIFT_FLAGS = "-DDEV";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -656,6 +662,7 @@
 				MTL_FAST_MATH = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Release;
 		};
