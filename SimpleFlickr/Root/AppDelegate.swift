@@ -17,9 +17,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        
+
         var config: BuildConfiguration
-        
+
         #if MOCK
         config = .mock
         #elseif DEV
@@ -27,11 +27,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         #else
         config = .prod
         #endif
-        
+
         if Utilities.isUnitTesting {
             config = .mock
         }
-        
+
         config.configure()
         //TODO: Handle initialization error
         dependencies = try? Dependencies(config: config)
@@ -42,7 +42,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             }
         )
         return true
-    }    
+    }
 }
 
 enum BuildConfiguration {
@@ -64,15 +64,17 @@ enum BuildConfiguration {
             // Mock build does NOT run Firebase
             break
         case .dev:
-            break //TODO: remove
-            let plist = Bundle.main.path(forResource: Constants.devGoogleSerrvicePlist, ofType: Constants.plistType)!
-            let options = FirebaseOptions(contentsOfFile: plist)!
-            FirebaseApp.configure(options: options)
+            break
+            // In the future:
+            // let plist = Bundle.main.path(forResource: Constants.devGoogleSerrvicePlist, ofType: Constants.plistType)!
+            // let options = FirebaseOptions(contentsOfFile: plist)!
+            // FirebaseApp.configure(options: options)
         case .prod:
             break
-            let plist = Bundle.main.path(forResource: Constants.prodGoogleSerrvicePlist, ofType: Constants.plistType)!
-            let options = FirebaseOptions(contentsOfFile: plist)!
-            FirebaseApp.configure(options: options)
+            // In the future:
+            // let plist = Bundle.main.path(forResource: Constants.prodGoogleSerrvicePlist, ofType: Constants.plistType)!
+            // let options = FirebaseOptions(contentsOfFile: plist)!
+            // FirebaseApp.configure(options: options)
         }
     }
 }
