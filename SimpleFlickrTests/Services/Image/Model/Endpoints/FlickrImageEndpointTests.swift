@@ -11,7 +11,6 @@ import Testing
 
 struct FlickrImageEndpointTests {
 
-    // MARK: - Basics
     @Test("Defaults and static config")
     func testDefaults() {
         let endpoint: FlickrImageEndpoint = .search(query: "kittens", page: 1, perPage: 20)

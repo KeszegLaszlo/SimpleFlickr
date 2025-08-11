@@ -70,6 +70,8 @@ struct FlickrSearchService: ImageSearchService {
             let assets = mapPhotosToAssets(photos.photo)
             let pageMeta = makePage(from: photos)
             return SearchResponse(items: assets, page: pageMeta)
+        } catch let flickrError as FlickrServiceError {
+            throw flickrError
         } catch let err as DecodingError {
             throw ImageSearchError.decoding(underlying: err)
         } catch {
@@ -297,12 +299,10 @@ private enum FlickrURLBuilder {
     ///   - sizeSuffix: Flickr size code (e.g., `q`=150 square, `b`≈1024 on long edge).
     /// - Returns: A valid `URL` if components form a proper URL.
     static func url(server: String, id: String, secret: String, sizeSuffix: String) -> URL? {
-        // https://live.staticflickr.com/{server-id}/{id}_{secret}_[size-suffix].jpg
-        // size suffix examples: q=150 square, m=240, n=320, z=640, b=1024
+        guard !server.isEmpty, !id.isEmpty, !secret.isEmpty else { return nil }
         var comps = URLComponents()
         comps.scheme = "https"
         comps.host = "live.staticflickr.com"
         comps.path = "/\(server)/\(id)_\(secret)_\(sizeSuffix).jpg"
         return comps.url
-    }
-}
+    }}

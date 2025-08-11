@@ -134,7 +134,6 @@ class ImageListPresenter {
     /// - Parameter image: The cell's trailing image that triggered pagination.
     func loadMoreData(image: ImageAsset) {
         let shouldContinue: Bool = image.id == images.last?.id && !isLoadingMore
-        print("MEHET TÖBB: \(shouldContinue)")
         guard shouldContinue else { return }
         Task {
             interactor.trackEvent(event: Event.loadMoreStart)
