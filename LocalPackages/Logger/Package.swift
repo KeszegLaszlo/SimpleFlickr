@@ -1,9 +1,7 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 6.0
 import PackageDescription
 
 let swiftSettings: [SwiftSetting] = [
-    .enableUpcomingFeature("ExistentialAny"),
-    .enableUpcomingFeature("StrictConcurrency"),
     .unsafeFlags(["-warn-concurrency", "-enable-actor-data-race-checks"])
 ]
 
@@ -19,7 +17,7 @@ let package = Package(
         .library(name: "LoggerFirebaseCrashlytics", targets: ["LoggerFirebaseCrashlytics"])
     ],
     dependencies: [
-        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "11.0.0")
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "11.15.0")
     ],
     targets: [
         .target(

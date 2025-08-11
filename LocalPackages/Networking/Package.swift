@@ -1,9 +1,7 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 6.0
 import PackageDescription
 
 let swiftSettings: [SwiftSetting] = [
-    .enableUpcomingFeature("ExistentialAny"),
-    .enableUpcomingFeature("StrictConcurrency"),
     .unsafeFlags(["-warn-concurrency", "-enable-actor-data-race-checks"])
 ]
 

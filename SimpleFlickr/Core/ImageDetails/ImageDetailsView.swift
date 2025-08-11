@@ -28,6 +28,7 @@ struct ImageDetailsView: View {
         static let backgroundOpacity: Double = 0.8
         static let backgroundOffsetY: CGFloat = 24
 
+        @MainActor
         enum Text {
             static let id: LocalizedStringKey = "detailsId"
             static let title: LocalizedStringKey = "detailsTitle"

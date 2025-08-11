@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @Model
-final nonisolated class SearchElementEntity {
+final class SearchElementEntity {
     @Attribute(.unique) var id: String
     var title: String
     var dateCreated: Date

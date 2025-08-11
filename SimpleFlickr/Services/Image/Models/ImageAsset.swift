@@ -8,6 +8,7 @@
 import Foundation
 import Utilities
 
+@MainActor
 struct ImageAsset: Hashable, Codable, Identifiable {
     struct Size: Hashable, Codable {
         public let width: Int?

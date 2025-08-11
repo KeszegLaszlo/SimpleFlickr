@@ -202,7 +202,7 @@ private struct FlickrPhotosDTO: Decodable {
     /// Normalized integer view of `total` irrespective of wire type.
     var totalInt: Int { totalRaw }
 
-    private nonisolated enum CodingKeys: String, CodingKey { case page, pages, perpage, total, photo }
+    private enum CodingKeys: String, CodingKey { case page, pages, perpage, total, photo }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -242,7 +242,7 @@ private struct FlickrPhotoDTO: Decodable {
     let thumbnailWidth: Int?
     let thumbnailHeight: Int?
 
-    private nonisolated enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case id, owner, secret, server, title
         case thumbnailURL = "url_q"
         case originalURL = "url_o"
