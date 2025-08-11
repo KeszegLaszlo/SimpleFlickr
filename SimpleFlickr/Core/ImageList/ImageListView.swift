@@ -91,7 +91,7 @@ struct ImageListView: View {
                 }
             }
         }
-        .blur(radius: isTextFieldIsFocused ? 10 : .zero)
+        .blur(radius: isTextFieldIsFocused ? GlobalConstants.Size.blurRadius : .zero)
         .animation(.bouncy, value: shouldAnimateFocus)
         .overlay(alignment: .top, content: {
             searchHistory
@@ -328,7 +328,7 @@ private extension ImageListView {
                                         presenter.updateLayoudId(to: 3)
                                     }
                             }
-                            .blur(radius: presenter.showLayoutSelector ? .zero : 10)
+                            .blur(radius: presenter.showLayoutSelector ? .zero : GlobalConstants.Size.blurRadius)
                             .opacity(presenter.showLayoutSelector ? 1 : .zero)
                             .scaleEffect(presenter.showLayoutSelector ? 1 : 0.5)
                         }
@@ -373,7 +373,7 @@ private extension ImageListView {
     var canvas: some View {
         Canvas { context, size in
             context.addFilter(.alphaThreshold(min: 0.8, color: .blue))
-            context.addFilter(.blur(radius: 10))
+            context.addFilter(.blur(radius: GlobalConstants.Size.blurRadius))
             context.drawLayer { ctx in
                 for index in 1...5 {
                     if let resolvedView = context.resolveSymbol(id: index) {

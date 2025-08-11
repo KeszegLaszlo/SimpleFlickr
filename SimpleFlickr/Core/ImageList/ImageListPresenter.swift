@@ -211,7 +211,7 @@ class ImageListPresenter {
             try interactor.addRecentSearch(search: searchModel)
             searchResults = try interactor.getSearchHistory()
         } catch {
-            // Handle error silently
+            router.showAlert(error: error)
         }
     }
 
@@ -225,7 +225,7 @@ class ImageListPresenter {
             }
             searchResults = try interactor.getSearchHistory()
         } catch {
-            // Optionally log error here
+            router.showAlert(error: error)
         }
     }
 

@@ -70,7 +70,7 @@ struct MediaPreviewView: View {
         case let .singleImage(url):
             ZStack {
                 imageView(url: url, resizingMode: .fill)
-                    .blur(radius: 15)
+                    .blur(radius: GlobalConstants.Size.blurRadius)
                 imageView(url: url, resizingMode: .fit)
             }
         case .images:
