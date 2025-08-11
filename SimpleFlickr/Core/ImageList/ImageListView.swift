@@ -11,8 +11,16 @@ import UserInterface
 
 struct ImageListView: View {
     private enum Constants {
+        @MainActor
         enum Text {
-            @MainActor static let placeholder: LocalizedStringKey = "Search images..."
+            static let placeholder: LocalizedStringKey = "placeholder"
+            static let a11ySearchLabel: LocalizedStringKey = "a11y.search.label"
+            static let a11ySearchHint: LocalizedStringKey = "a11y.search.hint"
+            static let a11yNoImagesYet: LocalizedStringKey = "a11y.no_images_yet"
+            static func a11yNoResults(for query: String) -> LocalizedStringKey { "a11y.no_results_for \(query)" }
+            static let a11yOpenImageDetailsHint: LocalizedStringKey = "a11y.open_image_details.hint"
+            static let a11yChipHint: LocalizedStringKey = "a11y.search_chip.hint"
+            static func a11yChipLabel(_ title: String) -> LocalizedStringKey { "a11y.search_chip.label \(title)" }
         }
 
         enum Size {
@@ -80,8 +88,10 @@ struct ImageListView: View {
         switch reason {
         case .noFetchedResults:
             ContentUnavailableView.search
+                .accessibilityLabel(Text(Constants.Text.a11yNoImagesYet))
         case let .notFoundForString(searchText):
             ContentUnavailableView.search(text: searchText)
+                .accessibilityLabel(Text(Constants.Text.a11yNoResults(for: searchText)))
         }
     }
 
@@ -127,6 +137,7 @@ struct ImageListView: View {
                         y: GlobalConstants.Shadow.shadowY
                     )
                     .withCustomScrollTransition
+                    .accessibilityHint(Text(Constants.Text.a11yOpenImageDetailsHint))
                     .onAppear {
                         presenter.loadMoreData(image: image)
                     }
@@ -147,6 +158,9 @@ struct ImageListView: View {
         ) {
             Task { await presenter.submitSearch() }
         }
+        .accessibilityLabel(Text(Constants.Text.a11ySearchLabel))
+        .accessibilityHint(Text(Constants.Text.a11ySearchHint))
+        .accessibilityValue(Text(presenter.searchText))
     }
 
     @ViewBuilder
@@ -193,6 +207,8 @@ struct ImageListView: View {
                     await presenter.historySearchDidTap(chip: search)
                 }
             }
+            .accessibilityLabel(Text(Constants.Text.a11yChipLabel(search.title)))
+            .accessibilityHint(Text(Constants.Text.a11yChipHint))
     }
 }
 

@@ -38,6 +38,7 @@ struct ImageDetailsView: View {
             static let original: LocalizedStringKey = "detailsOriginal"
             static let source: LocalizedStringKey = "detailsSource"
             static let size: LocalizedStringKey = "detailsSize"
+            static let imageOpenHint: LocalizedStringKey = "a11y.image_details.open_hint"
         }
     }
 
@@ -92,6 +93,10 @@ struct ImageDetailsView: View {
             .anyButton {
                 presenter.heroImageDidTap(url: imageUrl)
             }
+            .accessibilityLabel(Text(delegate.image.title))
+            .accessibilityHint(Text(Constants.Text.imageOpenHint))
+            .accessibilityAddTraits([.isImage, .isButton])
+            .accessibilityValue(Text(sizeText))
 
     }
 
@@ -100,8 +105,8 @@ struct ImageDetailsView: View {
         Grid(horizontalSpacing: Constants.hstackSpacing, verticalSpacing: Constants.detailsSpacing) {
             gridRow(systemName: "number", label: Constants.Text.id, value: delegate.image.id)
             gridRow(systemName: "textformat", label: Constants.Text.title, value: delegate.image.title)
-            gridRow(systemName: "link", label: Constants.Text.thumbnail, value: delegate.image.thumbnail.absoluteString)
-            gridRow(systemName: "photo", label: Constants.Text.original, value: delegate.image.original?.absoluteString ?? "—")
+            gridRow(systemName: "link", label: Constants.Text.thumbnail, value: delegate.image.thumbnail.absoluteString, isLink: true)
+            gridRow(systemName: "photo", label: Constants.Text.original, value: delegate.image.original?.absoluteString ?? "—", isLink: delegate.image.original != nil)
             gridRow(systemName: "person.crop.square", label: Constants.Text.source, value: delegate.image.source.displayName)
             gridRow(systemName: "aspectratio", label: Constants.Text.size, value: sizeText)
         }
@@ -122,12 +127,14 @@ struct ImageDetailsView: View {
     private func gridRow(
         systemName: String,
         label: LocalizedStringKey,
-        value: String
+        value: String,
+        isLink: Bool = false
     ) -> some View {
         GridRow {
             Image(systemName: systemName)
                 .foregroundStyle(.secondary)
                 .frame(width: Constants.imageSize, alignment: .leading)
+                .accessibilityHidden(true)
 
             Group {
                 Text(label) + Text(":")
@@ -135,13 +142,23 @@ struct ImageDetailsView: View {
             .fontWeight(.semibold)
             .gridColumnAlignment(.trailing)
 
-            Text(value)
-                .font(.callout)
-                .foregroundStyle(.secondary)
-                .gridColumnAlignment(.leading)
-                .lineLimit(Constants.lineLimit)
-                .truncationMode(.middle)
+            Group {
+                if isLink, let url = URL(string: value) {
+                    Link(value, destination: url)
+                } else {
+                    Text(value)
+                }
+            }
+            .font(.callout)
+            .foregroundStyle(.secondary)
+            .gridColumnAlignment(.leading)
+            .lineLimit(Constants.lineLimit)
+            .truncationMode(.middle)
+            .accessibilityAddTraits(isLink ? .isLink : .isStaticText)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(label))
+        .accessibilityValue(Text(value))
     }
 
     private var sizeText: String {

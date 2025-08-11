@@ -41,6 +41,17 @@
                ReferencedContainer = "container:SimpleFlickr.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "DA4151F42E4A235C0010A746"
+               BuildableName = "SimpleFlickrUITests.xctest"
+               BlueprintName = "SimpleFlickrUITests"
+               ReferencedContainer = "container:SimpleFlickr.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

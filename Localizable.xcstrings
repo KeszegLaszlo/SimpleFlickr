@@ -17,6 +17,182 @@
         }
       }
     },
+    "a11y.image_details.open_hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double-tap to view larger image"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dupla koppintás a nagyobb kép megtekintéséhez"
+          }
+        }
+      }
+    },
+    "a11y.media_preview.close_hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double-tap to close preview"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dupla koppintás az előnézet bezárásához"
+          }
+        }
+      }
+    },
+    "a11y.media_preview.multiple_images_label" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Multiple images"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Több kép"
+          }
+        }
+      }
+    },
+    "a11y.media_preview.single_image_label %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image: %@"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kép: %@"
+          }
+        }
+      }
+    },
+    "a11y.no_images_yet" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No images yet"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Még nincsenek képek"
+          }
+        }
+      }
+    },
+    "a11y.no_results_for %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No results for %@"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nincs találat erre: %@"
+          }
+        }
+      }
+    },
+    "a11y.open_image_details.hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double-tap to open image details"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dupla koppintás a kép részleteinek megnyitásához"
+          }
+        }
+      }
+    },
+    "a11y.search_chip.hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double-tap to search"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dupla koppintás a kereséshez"
+          }
+        }
+      }
+    },
+    "a11y.search_chip.label %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search for %@"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keresés erre: %@"
+          }
+        }
+      }
+    },
+    "a11y.search.hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type your query, then press return"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Írja be a keresett kifejezést, majd nyomja meg az Entert"
+          }
+        }
+      }
+    },
+    "a11y.search.label" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search images"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Képek keresése"
+          }
+        }
+      }
+    },
     "detailsId" : {
       "localizations" : {
         "en" : {
@@ -129,18 +305,18 @@
         }
       }
     },
-    "Search images..." : {
+    "placeholder" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Search images..."
+            "value" : "Search images.."
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Képek keresése..."
+            "value" : "Képek keresése…"
           }
         }
       }

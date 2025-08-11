@@ -55,19 +55,8 @@ struct AppViewForUITesting: View {
         CoreBuilder(interactor: CoreInteractor(container: container))
     }
 
-    private var startOnAvatarScreen: Bool {
-        ProcessInfo.processInfo.arguments.contains("STARTSCREEN_CREATEAVATAR")
-    }
-
     var body: some View {
         rootBuilder.build()
-//        if startOnAvatarScreen {
-//            RouterView { router in
-//                coreBuilder.createAvatarView(router: router)
-//            }
-//        } else {
-//            rootBuilder.build()
-//        }
     }
 }
 

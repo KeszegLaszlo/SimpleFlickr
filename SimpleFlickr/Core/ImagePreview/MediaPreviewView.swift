@@ -30,6 +30,13 @@ struct MediaPreviewView: View {
     /// Constants used within `MediaPreviewView`.
     private enum Constants {
         static let mediaButtonSize: CGFloat = 30
+
+        @MainActor
+        enum Text {
+            static let closeHint: LocalizedStringKey = "a11y.media_preview.close_hint"
+            static func singleImageLabel(_ title: String) -> LocalizedStringKey { "a11y.media_preview.single_image_label \(title)" }
+            static let multipleImagesLabel: LocalizedStringKey = "a11y.media_preview.multiple_images_label"
+        }
     }
 
     let delegate: MediaDelegate
@@ -41,6 +48,9 @@ struct MediaPreviewView: View {
     var body: some View {
         content
             .onAppear { presenter.onAppear() }
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel(Text(mediaAccessibilityLabel))
+            .accessibilityHint(Text(Constants.Text.closeHint))
             .withMeshGradientBackground
             .overlay(alignment: .topTrailing) {
                 FancyButton(style: .xmark, size: Constants.mediaButtonSize) {
@@ -49,6 +59,8 @@ struct MediaPreviewView: View {
                     }
                 }
                 .padding()
+                .accessibilityLabel(Text(Constants.Text.closeHint))
+                .accessibilityAddTraits(.isButton)
             }
     }
 
@@ -71,6 +83,16 @@ struct MediaPreviewView: View {
         ImageLoaderView(url: url, resizingMode: .fit)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .ignoresSafeArea()
+    }
+
+    /// Accessibility label for the displayed media, based on its type.
+    private var mediaAccessibilityLabel: LocalizedStringKey {
+        switch delegate.mediaContent {
+        case let .singleImage(url):
+            Constants.Text.singleImageLabel(url.lastPathComponent)
+        case .images:
+            Constants.Text.multipleImagesLabel
+        }
     }
 }
 
