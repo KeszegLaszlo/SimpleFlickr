@@ -285,7 +285,7 @@ private extension ImageListView {
         ZStack {
             Rectangle()
                 .fill(presenter.showLayoutSelector ? .ultraThinMaterial : .ultraThickMaterial)
-                .overlay(Rectangle().fill(.black.opacity(0.5)).blendMode(.softLight))
+                .overlay(Rectangle().fill(.black.opacity(0.5)).blendMode(.darken))
                 .mask(
                     canvas.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                 )
