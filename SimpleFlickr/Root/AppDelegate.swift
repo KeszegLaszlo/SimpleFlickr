@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  SimpleFlickr
 //
-//  Created by Keszeg László on 2025. 08. 09..
+//  Created by Keszeg László on 2025. 08. 09.
 //
 
 import Firebase
@@ -47,12 +47,22 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 enum BuildConfiguration {
     case mock, dev, prod
-    
+
+    /// Configures third-party services for the current build configuration.
+    ///
+    /// In a typical setup, this method would:
+    /// - Locate the appropriate `GoogleService-Info.plist` file for the given configuration (`mock`, `dev`, or `prod`).
+    /// - Initialize and configure Firebase with those options.
+    ///
+    /// The `mock` configuration typically skips Firebase initialization.
+    /// The `dev` and `prod` configurations would each point to their respective Firebase project files.
+    ///
+    /// Currently, Firebase is not set up, so this method is a placeholder.
     func configure() {
         switch self {
         case .mock:
             // Mock build does NOT run Firebase
-            break //TODO: remove
+            break
         case .dev:
             break //TODO: remove
             let plist = Bundle.main.path(forResource: Constants.devGoogleSerrvicePlist, ofType: Constants.plistType)!

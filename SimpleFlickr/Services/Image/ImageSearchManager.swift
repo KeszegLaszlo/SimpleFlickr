@@ -2,7 +2,7 @@
 //  ImageFetcherManager.swift
 //  SimpleFlickr
 //
-//  Created by Keszeg László on 2025. 08. 09..
+//  Created by Keszeg László on 2025. 08. 09.
 //
 
 import SwiftUI
@@ -190,10 +190,10 @@ private enum Event: LoggableEvent {
     /// Canonical event names used by logger backends.
     var eventName: String {
         switch self {
-        case .start: return "ImageSearchManager.searchImages.start"
-        case .success: return "ImageSearchManager.searchImages.success"
-        case .fail: return "ImageSearchManager.searchImages.fail"
-        case .returnCached: return "ImageSearchManager.searchImages.returnCached"
+        case .start: "ImageSearchManager.searchImages.start"
+        case .success: "ImageSearchManager.searchImages.success"
+        case .fail: "ImageSearchManager.searchImages.fail"
+        case .returnCached: "ImageSearchManager.searchImages.returnCached"
         }
     }
 
@@ -201,13 +201,13 @@ private enum Event: LoggableEvent {
     var parameters: [String: Any]? {
         switch self {
         case let .start(query, page):
-            return ["query": query, "page": "\(page)"]
+            ["query": query, "page": "\(page)"]
         case let .success(query, page):
-            return ["query": query, "page": "\(page)"]
+            ["query": query, "page": "\(page)"]
         case let .fail(query, page):
-            return ["query": query, "page": "\(page)"]
+            ["query": query, "page": "\(page)"]
         case let .returnCached(query):
-            return ["query": query]
+            ["query": query]
         }
     }
 

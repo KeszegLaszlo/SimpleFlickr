@@ -2,7 +2,7 @@
 //  ImagePreviewView.swift
 //  SimpleFlickr
 //
-//  Created by Keszeg László on 2025. 08. 09..
+//  Created by Keszeg László on 2025. 08. 09.
 //
 
 import SwiftUI
@@ -40,6 +40,7 @@ struct MediaPreviewView: View {
     /// Displays the media content with a gradient background and a close button overlay.
     var body: some View {
         content
+            .onAppear { presenter.onAppear() }
             .withMeshGradientBackground
             .overlay(alignment: .topTrailing) {
                 FancyButton(style: .xmark, size: Constants.mediaButtonSize) {

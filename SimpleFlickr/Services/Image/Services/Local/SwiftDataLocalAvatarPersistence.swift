@@ -1,8 +1,8 @@
 //
-//  SwiftDataLocalAvatarPersistence.swift
+//  SwiftDataLocalSearchHistoryPersistence.swift
 //  SimpleFlickr
 //
-//  Created by Keszeg László on 2025. 08. 10..
+//  Created by Keszeg László on 2025. 08. 10.
 //
 
 import SwiftData
@@ -35,6 +35,8 @@ struct SwiftDataLocalSearchHistoryPersistence: LocalSearchHistoryPersistence {
     ///
     /// The results are sorted by `dateCreated` in descending order (most recent first)
     /// and filtered to ensure each `title` appears only once (first occurrence kept).
+    ///
+    /// - TODO: In the future, the implementation should handle and replace an existing `SearchElement` when adding a new one with the same title.
     ///
     /// - Returns: An array of unique `SearchElementModel` items ordered from most recent to oldest.
     /// - Throws: Rethrows any Core Data fetch errors from `mainContext`.

@@ -2,7 +2,7 @@
 //  HighlightButtonStyle.swift
 //  UserInterface
 //
-//  Created by Keszeg László on 2025. 08. 09..
+//  Created by Keszeg László on 2025. 08. 09.
 //
 
 import SwiftUI
@@ -12,7 +12,7 @@ struct HighlightButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .overlay {
-                configuration.isPressed ? Color.orange.opacity(0.4) : Color.orange.opacity(0)
+                configuration.isPressed ? Color.orange.opacity(0.4) : Color.orange.opacity(.zero)
             }
             .animation(.smooth, value: configuration.isPressed)
     }

@@ -2,7 +2,7 @@
 //  ImageDetailsView.swift
 //  SimpleFlickr
 //
-//  Created by Keszeg László on 2025. 08. 09..
+//  Created by Keszeg László on 2025. 08. 09.
 //
 
 import SwiftUI
@@ -16,6 +16,7 @@ struct DetailsViewDelegate {
 struct ImageDetailsView: View {
     private enum Constants {
         static let hstackSpacing: CGFloat = 10
+        static let vstackSpacing: CGFloat = 20
         static let detailsSpacing: CGFloat = 20
         static let imageSize: CGFloat = 22
         static let lineLimit = 2
@@ -27,6 +28,7 @@ struct ImageDetailsView: View {
         static let backgroundBlur: CGFloat = 24
         static let backgroundOpacity: Double = 0.8
         static let backgroundOffsetY: CGFloat = 24
+        static let imageBackgroundOpcity: CGFloat = 0.12
 
         @MainActor
         enum Text {
@@ -44,7 +46,7 @@ struct ImageDetailsView: View {
     @State var presenter: ImageDetailsPresenter
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: Constants.vstackSpacing) {
             imageSection
             detailsSection
             Spacer()
@@ -53,6 +55,7 @@ struct ImageDetailsView: View {
         .withMeshGradientBackground
         .navigationTitle(delegate.image.title)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear { presenter.onAppear() }
     }
 
     @ViewBuilder
@@ -75,7 +78,7 @@ struct ImageDetailsView: View {
                 RoundedRectangle(cornerRadius: GlobalConstants.Size.cornerRadius, style: .continuous)
                     .fill(
                         LinearGradient(
-                            colors: [.indigo.opacity(0.22), .blue.opacity(0.12)],
+                            colors: [.indigo.opacity(Constants.imageBackgroundOpcity * 2), .blue.opacity(Constants.imageBackgroundOpcity)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )

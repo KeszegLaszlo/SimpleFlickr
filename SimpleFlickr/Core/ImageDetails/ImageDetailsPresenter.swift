@@ -2,7 +2,7 @@
 //  ImageDetailsPresenter.swift
 //  SimpleFlickr
 //
-//  Created by Keszeg László on 2025. 08. 09..
+//  Created by Keszeg László on 2025. 08. 09.
 //
 
 import Observation
@@ -25,10 +25,46 @@ class ImageDetailsPresenter {
         self.router = router
     }
 
+    /// Call from the view's `.onAppear` or `.task` to track screen impressions.
+    func onAppear() {
+        interactor.trackScreenEvent(event: Event.viewAppeared)
+    }
+
+
     /// Handles the event when the main image is tapped.
     /// - Parameter url: The URL of the tapped image.
     /// Triggers the router to present the image in a preview view.
     func heroImageDidTap(url: URL) {
+        interactor.trackEvent(event: Event.heroImageDidTap(urlString: url.absoluteString))
         router.showImagePreview(delegate: .init(mediaContent: .singleImage(url)))
+    }
+
+
+    /// Analytics and diagnostic events emitted by `ImageDetailsPresenter`.
+    private enum Event: LoggableEvent {
+        case viewAppeared
+        case heroImageDidTap(urlString: String)
+
+        var eventName: String {
+            switch self {
+            case .viewAppeared: "ImageDetailsView"
+            case .heroImageDidTap: "ImageDetailsPresenter_HeroImage_DidTap"
+            }
+        }
+
+        var parameters: [String: Any]? {
+            switch self {
+            case .viewAppeared:
+                return nil
+            case .heroImageDidTap(let urlString):
+                return ["url": urlString]
+            }
+        }
+
+        var type: LogType {
+            switch self {
+            default: .analytic
+            }
+        }
     }
 }

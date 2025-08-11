@@ -2,7 +2,7 @@
 //  RequestMethod.swift
 //  Networking
 //
-//  Created by Keszeg László on 2025. 08. 09..
+//  Created by Keszeg László on 2025. 08. 09.
 //
 
 public enum RequestMethod: String {
