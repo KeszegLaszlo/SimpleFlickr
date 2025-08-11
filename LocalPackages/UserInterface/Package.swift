@@ -15,6 +15,7 @@ let package = Package(
         .library(name: "UserInterface", targets: ["UserInterface"])
     ],
     dependencies: [
+        .package(url: "https://github.com/realm/SwiftLint", exact: "0.59.1"),
         .package(url: "https://github.com/SDWebImage/SDWebImageSwiftUI.git", from: "2.0.0")
     ],
     targets: [
@@ -24,7 +25,9 @@ let package = Package(
                 .product(name: "SDWebImageSwiftUI", package: "SDWebImageSwiftUI")
             ],
             swiftSettings: swiftSettings,
-            plugins: []
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")
+            ]
         ),
         .testTarget(
             name: "UserInterfaceTests",

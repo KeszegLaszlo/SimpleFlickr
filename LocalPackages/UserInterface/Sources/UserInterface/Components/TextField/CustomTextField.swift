@@ -14,6 +14,7 @@ public struct CustomTextField: View {
             static let dampingFraction: CGFloat = 0.6
             static let blendDuration: CGFloat = 0.5
         }
+
         enum Layout {
             static let verticalPadding: CGFloat = 12
             static let horizontalPadding: CGFloat = 15

@@ -8,7 +8,7 @@
 import SwiftUI
 
 @MainActor
-public struct AnyAppAlert: Sendable {
+public struct AnyAppAlert {
     var title: LocalizedStringKey
     var subtitle: LocalizedStringKey?
     var buttons: @Sendable () -> AnyView
