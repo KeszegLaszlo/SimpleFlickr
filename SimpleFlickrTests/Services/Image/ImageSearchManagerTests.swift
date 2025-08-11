@@ -144,6 +144,27 @@ struct ImageSearchManagerTests {
         #expect(recent == testB)
     }
 
+    @Test("No duplicate IDs across accumulated cache")
+    func noDuplicateIDsAcrossAccumulatedCache() async throws {
+        let service = MockImageSearchService(totalPages: 3, apiClient: mockApiClient)
+        let manager = makeManager(service: service)
+
+        // Page 1
+        _ = try await manager.searchImages(query: "dup-check", isPaginating: false)
+        // Page 2 & 3
+        _ = try await manager.searchImages(query: "dup-check", isPaginating: true)
+        _ = try await manager.searchImages(query: "dup-check", isPaginating: true)
+
+        // Non-paginating fetch returns the accumulated cache
+        let all = try await manager.searchImages(query: "dup-check", isPaginating: false)
+        #expect(all.isEmpty == false)
+
+        // Assert IDs are unique
+        let ids = all.map { $0.id }
+        let unique = Set(ids)
+        #expect(unique.count == ids.count)
+    }
+
     // MARK: - Helpers
 
     private func makeManager(

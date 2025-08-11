@@ -47,7 +47,7 @@ class MockImageSearchService: ImageSearchService {
         version += 1
 
         let start = (page - 1) * perPage
-        let items: [ImageAsset] = (0..<perPage).compactMap { idx in
+        let items: [ImageAsset] = (.zero..<perPage).compactMap { idx in
             let id = "test-\(query)-p\(page)-v\(version)-#\(start + idx)"
             guard let thumb = URL(string: "https://example.com/thumb/\(id)"),
                   let full  = URL(string: "https://example.com/full/\(id)") else { return nil }

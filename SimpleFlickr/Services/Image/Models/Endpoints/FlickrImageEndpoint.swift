@@ -14,7 +14,7 @@ enum FlickrImageEndpoint: EndpointProvider {
     //TODO: Handle api injection sendable
     nonisolated(unsafe) static var injectedAPIKey: String?
 
-    var scheme: String { "https" }
+    var scheme: String { NetworkingConstants.httpsScheme }
     var baseURL: String { "api.flickr.com" }
     var port: Int? { nil }
     var apiKey: String? { Self.injectedAPIKey }

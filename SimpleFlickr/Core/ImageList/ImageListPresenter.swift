@@ -42,8 +42,8 @@ class ImageListPresenter {
     private(set) var isLoadingMore = false
     /// The current high-level view state (loading, loaded, or empty) driving the UI.
     private(set) var viewState: ImageListView.ViewState = .loading
+    // Should keep the last selected in AppStorage
     /// The active grid/list layout identifier used by the view to switch layouts.
-    // TODO: should keep in AppStorage
     private(set) var layyoutId = Int.random(in: 1...3)
 
     private var lastCommittedSearchText = ""
@@ -52,7 +52,7 @@ class ImageListPresenter {
     var pitch: Double = .zero
     var roll: Double = .zero
     var rotation: Double = .zero
-    var motion: CMMotionManager
+    private let motion = CMMotionManager()
 
     /// The current search text. Mutated from the view and consumed by fetch operations.
     var searchText = Constants.defaultSearchText
@@ -70,7 +70,6 @@ class ImageListPresenter {
     init(interactor: any ImageListInteractor, router: any ImageListRouter) {
         self.interactor = interactor
         self.router = router
-        motion = CMMotionManager()
         motion.deviceMotionUpdateInterval = 1/60
         motion.startDeviceMotionUpdates(to: .main) { (motionData, error) in
             guard error == nil else { return }
