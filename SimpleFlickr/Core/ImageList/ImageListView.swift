@@ -92,12 +92,12 @@ struct ImageListView: View {
         }
         .blur(radius: isTextFieldIsFocused ? GlobalConstants.Size.blurRadius : .zero)
         .animation(.bouncy, value: shouldAnimateFocus)
-        .overlay(alignment: .top, content: {
-            searchHistory
-        })
         .safeAreaInset(edge: .top, spacing: .zero) {
             if presenter.viewState != .loading {
-                searchField
+                VStack {
+                    searchField
+                    searchHistory
+                }
             }
         }
         .withMeshGradientBackground
