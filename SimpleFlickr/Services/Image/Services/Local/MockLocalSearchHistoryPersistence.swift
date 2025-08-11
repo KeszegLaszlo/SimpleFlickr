@@ -5,6 +5,8 @@
 //  Created by Keszeg László on 2025. 08. 10.
 //
 
+import Foundation
+
 @MainActor
 struct MockLocalSearchHistoryPersistence: LocalSearchHistoryPersistence {
     var history: [SearchElementModel]
@@ -19,6 +21,17 @@ struct MockLocalSearchHistoryPersistence: LocalSearchHistoryPersistence {
     }
 
     func addRecentSearch(search: SearchElementModel) throws { }
-    func getSearchHistory() throws -> [SearchElementModel] { history }
-    func getMostRecentSearch() throws -> SearchElementModel? { mostRecent }
+    func getSearchHistory() throws -> [SearchElementModel] {
+        let sorted = history.sorted { $0.dateCreated > $1.dateCreated }
+        var seen = Set<String>()
+        return sorted.compactMap { model in
+            guard seen.insert(model.title).inserted else { return nil }
+            return model
+        }
+    }
+    func getMostRecentSearch() throws -> SearchElementModel? {
+        guard let mostRecent else { return nil }
+        let trimmed = mostRecent.title.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : mostRecent
+    }
 }
